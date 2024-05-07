@@ -1,53 +1,50 @@
+import java.util.ArrayList;
+
 public class Score {
 
-    /*필드*/
+    /* 필드 */
+    private ArrayList<SubjectScore> subjectScores; //
 
-    //과목고유번호
-    private final int subjectNum;
-    //수강생고유번호 (중복불가조건 -> final? // )
-    private final int studentNum;
-    //회차번호
-    private int roundNum; //roundNum 말고 Score 자체를 Studen클래스의 배열로 만들어서 저장하면 편하지 않을까?
-    //점수
-    private int examScore;
-    //등급
-    private char grade;
+    /* 생성자 */
+    Score() {
+        this.subjectScores = new ArrayList<>();
+    }
 
-    /*생성자*/
-    public Score(int subjectNum, int studentNum, int roundNum, int examScore){
-        this.subjectNum = subjectNum;
-        this.studentNum = studentNum;
-        this.roundNum = roundNum;
-        this.examScore = examScore;
+    /* 메서드 */
+    // 원하는 과목의 시험 회차 및 점수 등록하기
+    public void createScore(int scoreSubject, int score, int round) {
+        SubjectScore subjectScore = findSubjectScore(scoreSubject);
+        subjectScore.setSubjectScore(score, round);
+    }
 
-        //switch로, static으로 올라가있는 subjectNumList 속 subjectNum이랑 입력값의  if문으로 점수 나누기
-        //필수과목인 경우
-        if ( 95 <= this.examScore && this.examScore <= 100) {
-            this.grade = 'A';
-        } else if (90 <= this.examScore && this.examScore <= 94) {
+    // 원하는 과목의 시험 회차 및 점수 수정하기
+    public void modifyScore(int scoreSubject, int score, int round) {
+        SubjectScore subjectScore = findSubjectScore(scoreSubject);
+        subjectScore.modifySubjectScore(score, round);
+    }
 
-            this.grade = 'B';
-            // ...
-        } else { // 100 초과 및 음수
-            System.out.println("범위(0~100)에 벗어난 점수가 입력되어씁니다."); //예외처리 던지기
+    // 원하는 과목의 시험 회차 및 등급 조회하기
+    public void inquiryScore(int scoreSubject) {
+        SubjectScore subjectScore = findSubjectScore(scoreSubject);
+        System.out.println("[회차, 등급]");
+        subjectScore.getWholeGrade();
+    }
+
+    // 원하는 과목 인스턴스를 리턴하기(없으면 생성)
+    public SubjectScore findSubjectScore(int scoreSubject) { // student 클래스에서, 여기서 입력받은 과목이 수강생이 가진 과목과 일치하지 않는 경우를 확인해주는 메소드 필요 !!
+
+        // 원하는 과목이 subjectScoreSet 안에 들어가있나 확인
+        for (SubjectScore subjectScore : subjectScores) {
+            if (subjectScore.checkSubjectScoreSubject(scoreSubject)) {
+                return subjectScore;
+            }
         }
-
+        // 없는 경우에는 새로 생성해주기
+        SubjectScore subjectScore = new SubjectScore(scoreSubject);
+        subjectScores.add(subjectScore);
+        return subjectScore;
     }
-
-    /*메서드*/
-
-    //get,set 점수 외에 다른 것-> 굳이?
-
-    // get 점수
-    public int getExamScore(Score score){
-        return this.examScore;
-    }
-
-    // set 점수
-    public void getExamScore(){
-        System.out.println(this.examScore);
-    }
-
-
 
 }
+
+
