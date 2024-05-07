@@ -197,21 +197,14 @@ public class Main {
 
 
 
+
+
+
+
     private static int studentIndex =0;
     private static String sequence(String type) {
         return "ST" + studentIndex++;
-
     }
-
-
-
-
-
-
-
-
-
-
 
     private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
@@ -322,10 +315,6 @@ public class Main {
         System.out.println("\n수강생 목록 조회 성공!");
         Thread.sleep(1000);
     }
-
-
-
-
 
 
 
