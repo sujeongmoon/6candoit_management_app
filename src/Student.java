@@ -2,45 +2,77 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Student{
-
-    static List<Student> studentList = new ArrayList<>();
+public class Student {
 
 
-
-    List<String> subjects = new ArrayList<>();
-    //고유번호
-    private static int studentNum;
+    // 고유번호
+    private int studentNum;
     // 이름
-    private static String studentName;
-    // 필수과목
-    List<Subject> requiredSubject = new ArrayList<>();
-   // 선택과목
-    List<String> eletiveSubject;
+    private String studentName;
+    // 과목
+    private List<Integer> Subjects;
 
-    public Student () {
+    private List<Score> scoreStores;
 
-
-    }
-
-    public void setStudentNum (int studentNum) {
+    //생성자
+    public Student(int studentNum, String studentName, List<Integer> Subjects) {
         this.studentNum = studentNum;
-    }
-    public void setStudentName (String studentName) {
         this.studentName = studentName;
+        this.Subjects = Subjects;
     }
-    public void setRequiredSubject (List<Subject> requiredSubject) {
-        this.requiredSubject = requiredSubject;
+
+    //메서드
+
+
+    public List<Score> getScoreStores() {
+        return this.scoreStores;
     }
-    public void setEletiveSubject (List<String> eletiveSubject) {
-        this.eletiveSubject = eletiveSubject;
+
+    public void addScoreStores(Score score) {
+       scoreStores.add(score);
     }
-    public List<Subject> getRequiredSubject () {
-        return requiredSubject;
+    /*
+    특정 점수 찾기 메서드, 미확정
+    */
+    public Score searchGetScore( int subjectIdx, int roundNum) {
+        Score score = scoreStores.stream()
+                .filter(a -> a.getSubjectNum() == subjectIdx && a.getRoundNum() == roundNum)
+                .findFirst()
+                .orElseThrow(null);
+        System.out.println(score.getExamScore());
+        return score;
     }
-    static public List<Student> getStudentList() {
-        return List.copyOf(studentList);
+
+    public List<Score> searchGetSore( int subjectIdx, int roundNum) {
+        List<Score> score = scoreStores.stream()
+                .filter(a ->  a.getRoundNum() == roundNum)
+                .toList();
+
+        return score;
     }
-//    int studentNum, String studentName, List<String> requiredSubject, List<String> eletiveSubject
+    /*
+    학번 getter
+     */
+    public int getStudentNum() {
+        return studentNum;
+    }
+    /*
+    이름 getter
+     */
+    public String getStudentName() {
+        return studentName;
+    }
+    /*
+   과목 getter
+   */
+    public List<Integer> getSubjects() {
+        return Subjects;
+    }
+
+
 
 }
+
+
+
+
