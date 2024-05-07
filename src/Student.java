@@ -24,13 +24,13 @@ public class Student {
     //메서드
 
 
-    public List<Score> getScoreStores() {
-        return this.scoreStores;
-    }
-
-    public void addScoreStores(Score score) {
-       scoreStores.add(score);
-    }
+//    public List<Score> getScoreStores() {
+//        return this.scoreStores;
+//    }
+//
+//    public void addScoreStores(Score score) {
+//       scoreStores.add(score);
+//    }
     /*
     특정 점수 찾기 메서드
     */
