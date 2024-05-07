@@ -10,14 +10,15 @@ public class Student {
     private String studentName;
     // 과목
     private List<Integer> Subjects;
-
-    private List<Score> scoreStores;
+    //삭제
+    private Score score;
 
     //생성자
     public Student(String studentNum, String studentName, List<Integer> Subjects) {
         this.studentNum = studentNum;
         this.studentName = studentName;
         this.Subjects = Subjects;
+        score = new Score();
     }
 
     //메서드
