@@ -1,19 +1,23 @@
+package javateamproject.model;
+
+import javateamproject.type.SubjectType;
+
 public class Score implements Comparable<Score>{
     private final String subjectId;
     private final String studentId;
     private final String scoreId;
-    private String SubjectType;
+    private SubjectType subjectType;
     private String grade;
     private int score;
     private int round=0;
 
-    public Score( String scoreId,String studentId, String subjectId, int round, int score, String subjectType) {
+    public Score(String scoreId, String studentId, String subjectId, int round, int score, SubjectType subjectType) {
         this.scoreId = scoreId;
         this.subjectId = subjectId;
         this.studentId = studentId;
         this.score = score;
         this.round = round;
-        if(subjectType.equals("essential")){
+        if(subjectType.equals(SubjectType.MUST)){
             if(score>=95) grade = "A";
             else if(score>=90) grade="B";
             else if(score>=80) grade="C";
@@ -30,7 +34,6 @@ public class Score implements Comparable<Score>{
             else grade="N";
         }
     }
-
     // Getter
     public String getScoreId() {
         return scoreId;
@@ -53,7 +56,7 @@ public class Score implements Comparable<Score>{
 
     public void setScore(int score){
         this.score=score;
-        if(this.SubjectType.equals("essential")){
+        if(this.subjectType.equals(SubjectType.MUST)){
             if(score>=95) grade = "A";
             else if(score>=90) grade="B";
             else if(score>=80) grade="C";
@@ -62,7 +65,7 @@ public class Score implements Comparable<Score>{
             else grade="N";
         }
         else{
-            if(score>=90) grade = "C";
+            if(score>=90) grade = "A";
             else if(score>=80) grade="B";
             else if(score>=70) grade="C";
             else if(score>=60) grade="D";
@@ -70,7 +73,7 @@ public class Score implements Comparable<Score>{
             else grade="N";
         }
     }
-
+    //정렬용 라운드 크기 기준으로
     @Override
     public int compareTo(Score o) {
         return Integer.compare(this.round,o.round);
