@@ -12,6 +12,10 @@ public class Student {
     private List<Integer> Subjects;
 
 
+    // 상태
+    private String status;
+
+
     //생성자
     public Student(String studentNum, String studentName, List<Integer> Subjects) {
         this.studentNum = studentNum;
@@ -21,7 +25,6 @@ public class Student {
     }
 
     //메서드
-
 
 
     /*
@@ -45,6 +48,7 @@ public class Student {
         return Subjects;
     }
 
+
     public Score getScore() {
         return this.score;
     }
@@ -57,6 +61,11 @@ public class Student {
 
 
 
+
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 
 }

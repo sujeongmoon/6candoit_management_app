@@ -1,4 +1,3 @@
-import javax.security.auth.Subject;
 import java.util.*;
 
 public class Main {
@@ -27,7 +26,7 @@ public class Main {
                     displayStudent();
                     break;
                 case "2": //성적관리
-                    //displayScore();break;
+                    displayScore();break;
                 case "3":
                     flag = false;
                     break;
@@ -41,53 +40,110 @@ public class Main {
     public static void displayStudent() throws InterruptedException {
         boolean flag = true;
         do {
-            System.out.println("1. 수강생 등록\n2. 수강생 목록 조회\n3.메인 화면 이동");
+            System.out.println("1. 수강생 등록\n2. 수강생 조회\n3. 수강생 수정\n4. 수강생 삭제\n5. 메인 화면 이동\n");
 
             String choose = sc.next();//nextLine 하려면 앞에 정수 입력하고 남은 엔터키 받아주는거 필요
             switch (choose) {
-                case "1":
-                    createStudent();
-                    break;
-                case "2":
-                    inquiryStudent();
-                    break;
-                case "3":
+                case "1"-> createStudent();
+                case "2"-> displayInquiryStudent();
+                case "3"-> displayUpdateStudent();
+                case "4"-> removeStudent();
+                case "5"-> {
                     flag = false;
                     displayMain();
-                    break;
-                default:
-                    System.out.println("1~3까지의 정숫를 입력해주세요\n");
+                }
+                default->{System.out.println("1~5까지의 정숫를 입력해주세요\n");}
+            }
+        } while (flag);
+    }
+    public static void displayInquiryStudent() throws InterruptedException {
+        boolean flag = true;
+        do {
+            System.out.println("1. 전체 목록 조회\n2. 수강생 개인 조회\n3. 수강생 상태별 조회\n4. 메인 화면 이동\n");
+
+            String choose = sc.next();//nextLine 하려면 앞에 정수 입력하고 남은 엔터키 받아주는거 필요
+            switch (choose) {
+                case "1"-> inquiryStudent();
+                case "2"-> searchStudent ();
+                case "3"-> inquiryStatusStudent();
+                case "5"-> {
+                    flag = false;
+                    displayMain();
+                }
+                default->{System.out.println("1~4까지의 정숫를 입력해주세요\n");}
             }
         } while (flag);
     }
 
-   /*public static void displayScore() {
+
+
+    private static void displayUpdateStudent() throws InterruptedException {
         boolean flag = true;
         do {
-            System.out.println("1. 성적 등록\n2.점수 수정\n3. 점수 조회\n4. 종료");
+            System.out.println("1. 이름 수정\n2. 상태 수정(관리)\n3. 메인 화면 이동\n");
+
+            String choose = sc.next();//nextLine 하려면 앞에 정수 입력하고 남은 엔터키 받아주는거 필요
+            switch (choose) {
+                case "1"->  updateStudentName();
+                case "2"-> setStatusStudent ();
+                case "3"-> {
+                    flag = false;
+                    displayMain();
+                }
+                default->{System.out.println("1~3까지의 정숫를 입력해주세요\n");}
+            }
+        } while (flag);
+    }
+
+    public static void displayScore() throws InterruptedException {
+        boolean flag = true;
+        do {
+            System.out.println("1. 점수 등록\n2.점수 수정\n3. 점수 조회\n4. 메인 화면 이동");
             String choose = sc.nextLine();
             switch (choose) {
                 case "1":
-                    createScore();
+                    addScore();
                 case "2":
-                    setScoreAtStudent();
+                    modScore();
                 case "3":
-                    inquiryScoreAtStudent();
+                    displayInquiryScore();
                 case "4":
                     flag = false;
                     displayMain();
                     break;
                 default:
-                    System.out.println("1~3까지의 정숫를 입력해주세요");
+                    System.out.println("1~4까지의 정숫를 입력해주세요");
             }
         } while (flag);
-    }*/
+    }
+
+
+
+
+    public static void displayInquiryScore() throws InterruptedException {
+        boolean flag = true;
+        do {
+            System.out.println("1. 수강생 과복별 시험 회차 등급 조회\n2. 수강생의 과목별 평균 등급을 조회\n3. 수강생 상태별 평균 등급을 조회\n4. 메인 화면 이동\n");
+
+            String choose = sc.next();//nextLine 하려면 앞에 정수 입력하고 남은 엔터키 받아주는거 필요
+            switch (choose) {
+                case "1"-> inqScore();
+                case "2"-> inquiryStudentAverageBySubject();
+                case "3"->  inquiryStudentAverageByStatus();
+                case "4"-> {
+                    flag = false;
+                    displayMain();
+                }
+                default->{System.out.println("1~4까지의 정숫를 입력해주세요\n");}
+            }
+        } while (flag);
+    }
 
     private static String sequence() {
         return "ST" + studentIndex++;
     }
 
-    private static void createStudent() {
+    private static void createStudent() throws InterruptedException {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
         //Student student = searchGetStudent();
@@ -125,6 +181,7 @@ public class Main {
                 continue;
             }
             System.out.println("필수과목 " + count + "개 입력하셨습니다.");
+            viewSubjects(subjectIds);
             if (count >= 5) {
                 System.out.println("\n 모든 과목을 입력하셨습니다.");
                 break;
@@ -165,7 +222,9 @@ public class Main {
                 System.out.println("5~8까지의 정수를 입력해주세요");
                 continue;
             }
-            System.out.println("선택과목 " + count + "개 입력하셨습니다.");
+            System.out.println("선택과목" +
+                    " " + count + "개 입력하셨습니다.");
+            viewSubjects(subjectIds);
             if (count >= 4) {
                 System.out.println("\n 모든 과목을 입력하셨습니다.");
                 break;
@@ -183,6 +242,12 @@ public class Main {
         students.add(new Student(sequence(), studentName, subjectIds)); // 수강생 인스턴스 생성 예시 코드
         // 기능 구현
         System.out.println("수강생 등록 성공!\n");
+        System.out.println("-----------------------");
+        System.out.println("이름 : " +studentName);
+        System.out.println("학번 : " +"ST"+studentIndex);
+        viewSubjects(subjectIds);
+        System.out.println("-----------------------\n");
+        Thread.sleep(1000);
     }
 
     // 수강생 목록 조회
@@ -220,4 +285,57 @@ public class Main {
         }
 
     }
+
+    private static String getSubjectName(int idx){return subjectS[idx];}
+    private static void viewSubjects(List<Integer> subjectsItem) {
+        boolean[] sw = new boolean[2];//필수, 선택 과목 출력 여부 체크
+        for (int i : subjectsItem) {
+            if (i < 5 && !sw[0]) {
+                System.out.print("필수 과목 목록 : ");
+                sw[0] = true;
+            }
+            if (i >= 5 && !sw[1] ) {
+                System.out.print("\n선택 과목 목록 : ");
+                sw[1] = true;
+            }
+            System.out.print(getSubjectName(i) + "(" + i + ")  ");
+        }
+        System.out.println();
+    }
+
+    //여기서 부터 승완님
+    private static void searchStudent() {
+    }
+
+    private static void removeStudent() {
+    }
+    private static void updateStudentName() {
+    }
+
+
+    //여기서 부터 수정님
+    private static void inquiryStatusStudent() {
+    }
+    private static void setStatusStudent() {
+
+    }
+
+
+
+    // 종원님
+    private static void addScore() {
+    }
+    private static void modScore() {
+    }
+    private static void inqScore() {
+    }
+
+
+
+    //경민님
+    private static void inquiryStudentAverageByStatus() {
+    }
+    private static void inquiryStudentAverageBySubject() {
+    }
+
 }

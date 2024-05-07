@@ -12,7 +12,7 @@ public class Score {
 
     /* 메서드 */
     // 원하는 과목의 시험 회차 및 점수 등록하기
-    public void createScore(int scoreSubject, int score, int round) {
+    public void setScore(int scoreSubject, int score, int round) {
         SubjectScore subjectScore = findSubjectScore(scoreSubject);
         subjectScore.setSubjectScore(score, round);
     }
