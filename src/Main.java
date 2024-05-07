@@ -1,13 +1,10 @@
 import javax.security.auth.Subject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    private static List<Student> students;
-    private static List<Subject> subjects;
-    private static List<Score> scores;
+    private static List<Student> students = new ArrayList<>();
+    private static final String[] subjectS={"JAVA","객체지향","SPRING", "JPA","MYSQL","디자인패턴","Spring Security","Redis","MongoDB"};
+    //private static List<Score> scores = new ArrayList<>();
     private static int studentIndex = 0;
 
     private static Scanner sc = new Scanner(System.in);
@@ -22,9 +19,9 @@ public class Main {
 
     public static void displayMain() throws InterruptedException {
         boolean flag = true;
-        System.out.println("메인페이지입니다\n숫자를 입력해주세요! \n1.학생관리 2. 성적관리  3.나가기");
-        String choose = sc.nextLine();
         do {
+            System.out.println("메인페이지입니다\n숫자를 입력해주세요! \n1.학생관리 2.성적관리  3.나가기");
+            String choose = sc.next();
             switch (choose) {
                 case "1": //학생관리
                     displayStudent();
@@ -34,8 +31,11 @@ public class Main {
                 case "3":
                     flag = false;
                     break;
+                default:
+                    System.out.println("1~3까지의 정숫를 입력해주세요\n");
             }
         } while (flag);
+        System.out.println("프로그램을 종료합니다!");
     }
 
     public static void displayStudent() throws InterruptedException {
@@ -43,7 +43,7 @@ public class Main {
         do {
             System.out.println("1. 수강생 등록\n2. 수강생 목록 조회\n3.메인 화면 이동");
 
-            String choose = sc.nextLine();
+            String choose = sc.next();//nextLine 하려면 앞에 정수 입력하고 남은 엔터키 받아주는거 필요
             switch (choose) {
                 case "1":
                     createStudent();
@@ -55,6 +55,8 @@ public class Main {
                     flag = false;
                     displayMain();
                     break;
+                default:
+                    System.out.println("1~3까지의 정숫를 입력해주세요\n");
             }
         } while (flag);
     }
@@ -74,6 +76,9 @@ public class Main {
                 case "4":
                     flag = false;
                     displayMain();
+                    break;
+                default:
+                    System.out.println("1~3까지의 정숫를 입력해주세요");
             }
         } while (flag);
     }*/
@@ -85,8 +90,9 @@ public class Main {
     private static void createStudent() {
         System.out.println("\n수강생을 등록합니다...");
         System.out.print("수강생 이름 입력: ");
-        Student student = searchGetStudent();
-        String studentName = student.getStudentName();
+        //Student student = searchGetStudent();
+        String studentName = sc.next();
+
         // 기능 구현 (필수 과목, 선택 과목)
         int m_idx = 0;
         int c_idx = 0;
@@ -148,15 +154,15 @@ public class Main {
                 }
                 if (m_idx < 5 || m_idx > 8) {
                     System.out.println("잘못 입력하셨습니다.");
-                    System.out.println("5~9까지의 정수를 입력해주세요");
+                    System.out.println("5~8까지의 정수를 입력해주세요");
                     continue;
                 }
                 count++;
-                visited[m_idx - 1] = true;
-                subjectIds.add(c_idx - 1);
+                visited[m_idx] = true;
+                subjectIds.add(m_idx);
             } catch (Exception ignored) {
                 System.out.println("잘못 입력하셨습니다.");
-                System.out.println("5~9까지의 정수를 입력해주세요");
+                System.out.println("5~8까지의 정수를 입력해주세요");
                 continue;
             }
             System.out.println("선택과목 " + count + "개 입력하셨습니다.");
@@ -203,7 +209,7 @@ public class Main {
             studentNum = sc.next();
             String finalStudentNum = studentNum;
             Optional<Student> result = students.stream()
-                        .filter(student -> student.getStudentNum() == finalStudentNum)
+                        .filter(student -> Objects.equals(student.getStudentNum(), finalStudentNum))
                         .findFirst();
                         // 입력된 학번이 유효한지 ? 확인하기!
             if (result.isPresent()) {
