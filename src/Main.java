@@ -36,6 +36,42 @@ public class Main {
         } while (flag);
     }
 
+    public static void displayStudent() throws InterruptedException {
+        boolean flag = true;
+        do {
+            System.out.println("1. 수강생 등록\n2. 수강생 목록 조회\n3.메인 화면 이동");
+
+            String choose = sc.nextLine();
+            switch (choose) {
+                case "1":
+                    createStudent();
+                case "2":
+                    inquiryStudent();
+                case "3":
+                    flag = false;
+                    displayMain();
+            }
+        } while (flag);
+    }
+
+    public static void displayScore() {
+        boolean flag = true;
+        do {
+            System.out.println("1. 성적 등록\n2.점수 수정\n3. 점수 조회\n4. 종료");
+            String choose = sc.nextLine();
+            switch (choose) {
+                case "1":
+                    createScore();
+                case "2":
+                    setScoreAtStudent();
+                case "3":
+                    inquiryScoreAtStudent();
+                case "4":
+                    flag = false;
+                    displayMain();
+            }
+        } while (flag);
+    }
 
     private static String sequence() {
         return "ST" + studentIndex++;
@@ -131,19 +167,19 @@ public class Main {
             }
         }
         System.out.println("모든 과목이 입력 되었습니다.\n");
-        studentStore.add(new Student(sequence(), studentName,subjectIds)); // 수강생 인스턴스 생성 예시 코드
+        students.add(new Student(sequence(), studentName,subjectIds)); // 수강생 인스턴스 생성 예시 코드
         // 기능 구현
         System.out.println("수강생 등록 성공!\n");
     }
 
     // 수강생 목록 조회
-    private static void inquireStudent() throws InterruptedException {
+    private static void inquiryStudent() throws InterruptedException {
         System.out.println("\n수강생 목록을 조회합니다...");
         // 기능 구현
         System.out.println("수강생 목록:");
 
-        for(int i=0;i<studentStore.size();i++){
-            System.out.print(studentStore.get(i).getStudentName()+"("+studentStore.get(i).getStudentId()+")   ");
+        for(int i=0;i<students.size();i++){
+            System.out.print(students.get(i).getStudentName()+"("+studentStore.get(i).getStudentId()+")   ");
             if((i+1)%10 == 0 ) System.out.println();
         }
         System.out.println();
@@ -153,42 +189,5 @@ public class Main {
 
 
 
-=======
-    public static void displayStudent() {
-        boolean flag = true;
-        do {
-            System.out.println("1. 수강생 등록\n2. 수강생 목록 조회\n3.메인 화면 이동");
-
-            String choose = sc.nextLine();
-            switch (choose) {
-                case "1":
-                    createStudent();
-                case "2":
-                    inquiryStudent();
-                case "3":
-                    flag = false;
-                    displayMain();
-            }
-        } while (flag);
-    }
-
-    public static void displayScore() {
-        boolean flag = true;
-        do {
-            System.out.println("1. 성적 등록\n2.점수 수정\n3. 점수 조회\n4. 종료");
-            String choose = sc.nextLine();
-            switch (choose) {
-                case "1":
-                    createScore();
-                case "2":
-                    setScoreAtStudent();
-                case "3":
-                    inquiryScoreAtStudent();
-                case "4":
-                    flag = false;
-                    displayMain();
-            }
-        } while (flag);
-    }
 
 }
