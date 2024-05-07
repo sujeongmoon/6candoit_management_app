@@ -21,7 +21,7 @@ public class Student {
         this.Subjects = Subjects;
     }
 
-    //메서드
+    //메서드d
 
 
     public List<Score> getScoreStores() {
