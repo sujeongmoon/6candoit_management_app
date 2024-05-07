@@ -1,54 +1,79 @@
-import java.util.ArrayList;
+public class Score implements Comparable<Score>{
+    private final String subjectId;
+    private String scoreId;
+    private final String studentId;
+    private String SubjectType;
+    private String grade;
+    private int score;
+    private int round=0;
 
-public class Score {
+    public Score(String studentId,  String subjectId,int round,int score,String subjectType) {
 
-    /* 필드 */
-    private ArrayList<SubjectScore> subjectScores; //
-
-    /* 생성자 */
-    Score() {
-        this.subjectScores = new ArrayList<>();
-    }
-
-    /* 메서드 */
-    // 원하는 과목의 시험 회차 및 점수 등록하기
-    public void setScore(int scoreSubject, int score, int round) {
-        SubjectScore subjectScore = findSubjectScore(scoreSubject);
-        subjectScore.setSubjectScore(score, round);
-    }
-
-    // 원하는 과목의 시험 회차 및 점수 수정하기
-    public void modifyScore(int scoreSubject, int score, int round) {
-        SubjectScore subjectScore = findSubjectScore(scoreSubject);
-        subjectScore.modifySubjectScore(score, round);
-    }
-
-    // 원하는 과목의 시험 회차 및 등급 조회하기
-    public void inquiryScore(int scoreSubject) {
-        SubjectScore subjectScore = findSubjectScore(scoreSubject);
-        System.out.println("[회차, 등급]");
-        subjectScore.getWholeGrade();
-    }
-
-    // 원하는 과목 인스턴스를 리턴하기(없으면 생성)
-    public SubjectScore findSubjectScore(int scoreSubject) { // student 클래스에서, 여기서 입력받은 과목이 수강생이 가진 과목과 일치하지 않는 경우를 확인해주는 메소드 필요 !!
-
-        // 원하는 과목이 subjectScoreSet 안에 들어가있나 확인
-        for (SubjectScore subjectScore : subjectScores) {
-            if (subjectScore.checkSubjectScoreSubject(scoreSubject)) {
-                return subjectScore;
-            }
+        this.subjectId = subjectId;
+        this.studentId = studentId;
+        this.score = score;
+        this.round = round;
+        if(subjectType.equals("essential")){
+            if(score>=95) grade = "A";
+            else if(score>=90) grade="B";
+            else if(score>=80) grade="C";
+            else if(score>=70) grade="D";
+            else if(score>=60) grade="F";
+            else grade="N";
         }
-        // 없는 경우에는 새로 생성해주기
-        SubjectScore subjectScore = new SubjectScore(scoreSubject);
-        subjectScores.add(subjectScore);
-        return subjectScore;
+        else{
+            if(score>=90) grade = "C";
+            else if(score>=80) grade="B";
+            else if(score>=70) grade="C";
+            else if(score>=60) grade="D";
+            else if(score>=50) grade="F";
+            else grade="N";
+        }
     }
 
+    // Getter
+    public String getScoreId() {
+        return scoreId;
+    }
+    public String getSubjectId(){
+        return subjectId;
+    }
+    public String getStudentId(){
+        return studentId;
+    }
+    public int getRound(){
+        return round;
+    }
+    public int getScore(){
+        return score;
+    }
+    public String getGrade(){
+        return  grade;
+    }
+
+    public void setScore(int score){
+        this.score=score;
+        if(this.SubjectType.equals("essential")){
+            if(score>=95) grade = "A";
+            else if(score>=90) grade="B";
+            else if(score>=80) grade="C";
+            else if(score>=70) grade="D";
+            else if(score>=60) grade="F";
+            else grade="N";
+        }
+        else{
+            if(score>=90) grade = "C";
+            else if(score>=80) grade="B";
+            else if(score>=70) grade="C";
+            else if(score>=60) grade="D";
+            else if(score>=50) grade="F";
+            else grade="N";
+        }
+    }
+
+    @Override
+    public int compareTo(Score o) {
+        return Integer.compare(this.round,o.round);
+    }
 
 }
-
-
-
-
-

@@ -1,8 +1,9 @@
 import java.util.*;
 
 public class Main {
-    private static List<Student> students = new ArrayList<>();
-    private static final String[] subjectS={"JAVA","객체지향","SPRING", "JPA","MYSQL","디자인패턴","Spring Security","Redis","MongoDB"};
+    private static List<Student> studentS = new ArrayList<>();
+    private static List<Subject subjects = new ArrayList<>();
+    private static List<Score> scores = new ArrayList<>();
     //private static List<Score> scores = new ArrayList<>();
     private static int studentIndex = 0;
 
