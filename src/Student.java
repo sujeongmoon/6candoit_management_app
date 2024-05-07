@@ -1,12 +1,11 @@
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Student {
 
 
     // 고유번호
-    private int studentNum;
+    private String studentNum;
     // 이름
     private String studentName;
     // 과목
@@ -15,7 +14,7 @@ public class Student {
     private List<Score> scoreStores;
 
     //생성자
-    public Student(int studentNum, String studentName, List<Integer> Subjects) {
+    public Student(String studentNum, String studentName, List<Integer> Subjects) {
         this.studentNum = studentNum;
         this.studentName = studentName;
         this.Subjects = Subjects;
@@ -34,7 +33,7 @@ public class Student {
     /*
     특정 점수 찾기 메서드
     */
-    public Score searchGetScore( int subjectIdx, int roundNum) {
+    /*public Score searchGetScore( int subjectIdx, int roundNum) {
         Score score = scoreStores.stream()
                 .filter(a -> a.getSubjectNum() == subjectIdx && a.getRoundNum() == roundNum)
                 .findFirst()
@@ -49,11 +48,11 @@ public class Student {
                 .toList();
 
         return score;
-    }
+    }*/
     /*
     학번 getter
      */
-    public int getStudentNum() {
+    public String getStudentNum() {
         return studentNum;
     }
     /*
