@@ -1,14 +1,14 @@
 public class Score implements Comparable<Score>{
     private final String subjectId;
-    private String scoreId;
     private final String studentId;
+    private final String scoreId;
     private String SubjectType;
     private String grade;
     private int score;
     private int round=0;
 
-    public Score(String studentId,  String subjectId,int round,int score,String subjectType) {
-
+    public Score( String scoreId,String studentId, String subjectId, int round, int score, String subjectType) {
+        this.scoreId = scoreId;
         this.subjectId = subjectId;
         this.studentId = studentId;
         this.score = score;

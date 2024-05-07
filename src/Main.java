@@ -1,15 +1,18 @@
 import java.util.*;
 
 public class Main {
-    private static List<Student> studentS = new ArrayList<>();
-    private static List<Subject subjects = new ArrayList<>();
-    private static List<Score> scores = new ArrayList<>();
+    private static List<Student> studentS ;
+    private static List<Subject> subjectS ;
+    private static List<Score> scoreS ;
     //private static List<Score> scores = new ArrayList<>();
-    private static int studentIndex = 0;
+    private static int studentIndex;
+    private static int scoreIndex;
+    private static int subjectIndex ;
 
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        setInit();
         try {
             displayMain();
         } catch (Exception e) {
@@ -17,6 +20,57 @@ public class Main {
         }
     }
 
+    private static void setInit(){
+        studentS = new ArrayList<>();
+        subjectS = List.of(
+                new Subject(
+                        sequence(classType.SUBJECT),
+                        "Java",
+                        SUBJECT_TYPE_MANDATORY
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "객체지향",
+                        SUBJECT_TYPE_MANDATORY
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "Spring",
+                        SUBJECT_TYPE_MANDATORY
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "JPA",
+                        SUBJECT_TYPE_MANDATORY
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "MySQL",
+                        SUBJECT_TYPE_MANDATORY
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "디자인 패턴",
+                        SUBJECT_TYPE_CHOICE
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "Spring Security",
+                        SUBJECT_TYPE_CHOICE
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "Redis",
+                        SUBJECT_TYPE_CHOICE
+                ),
+                new Subject(
+                        sequence(INDEX_TYPE_SUBJECT),
+                        "MongoDB",
+                        SUBJECT_TYPE_CHOICE
+                )
+        );
+        scoreStore = new ArrayList<>();
+    }
     public static void displayMain() throws InterruptedException {
         boolean flag = true;
         do {
@@ -140,8 +194,21 @@ public class Main {
         } while (flag);
     }
 
-    private static String sequence() {
-        return "ST" + studentIndex++;
+    private static String sequence(classType classtype) {
+        switch (classtype){
+            case STUDENT -> {
+                return classtype.getIdxName()+studentIndex++;
+            }
+            case SCORE -> {
+                return classtype.getIdxName()+scoreIndex++;
+            }
+            case SUBJECT -> {
+                return classtype.getIdxName()+subjectIndex++;
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     private static void createStudent() throws InterruptedException {
@@ -240,7 +307,7 @@ public class Main {
             }
         }
         System.out.println("모든 과목이 입력 되었습니다.\n");
-        students.add(new Student(sequence(), studentName, subjectIds)); // 수강생 인스턴스 생성 예시 코드
+        students.add(new Student(sequence(classType.STUDENT), studentName, subjectIds)); // 수강생 인스턴스 생성 예시 코드
         // 기능 구현
         System.out.println("수강생 등록 성공!\n");
         System.out.println("-----------------------");
