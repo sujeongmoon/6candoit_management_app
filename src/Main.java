@@ -24,7 +24,7 @@ public class Main {
                 case "1": //학생관리
                     displayStudent();
                 case "2": //성적관리
-//                    displayScore();
+                    displayScore();
                 case "3":
                     flag = false;
                     break;
