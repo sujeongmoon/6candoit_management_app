@@ -14,6 +14,10 @@ public class SubjectScore {
         this.subjectScoreStore = new int[10];
         this.subjectGradeStore = new char[10];
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4f7af909d7461ef1c4e74043dce6e5063da93472
     /* 메서드 */
     // 점수 등록하는 메서드
     public void setSubjectScore(int examScore, int round) {
@@ -92,4 +96,8 @@ public class SubjectScore {
         return true; // 있는 경우
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4f7af909d7461ef1c4e74043dce6e5063da93472

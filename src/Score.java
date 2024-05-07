@@ -45,4 +45,10 @@ public class Score {
         return subjectScore;
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+
+
+>>>>>>> 4f7af909d7461ef1c4e74043dce6e5063da93472
