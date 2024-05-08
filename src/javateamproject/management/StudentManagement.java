@@ -1,5 +1,6 @@
 package javateamproject.management;
 
+import javateamproject.model.Student;
 import javateamproject.store.Store;
 import javateamproject.type.SubjectType;
 
@@ -7,6 +8,7 @@ import java.util.*;
 
 public class StudentManagement {
     private static Scanner sc = new Scanner(System.in);
+
     //수강생 등록
     public static void createStudent() throws InterruptedException {
         System.out.println("\n수강생을 등록합니다...");
@@ -104,12 +106,13 @@ public class StudentManagement {
         // 기능 구현
         System.out.println("수강생 등록 성공!\n");
         System.out.println("-----------------------");
-        System.out.println("이름 : " +studentName);
-        System.out.println("학번 : " +"ST"+Store.getStudentIndex());
+        System.out.println("이름 : " + studentName);
+        System.out.println("학번 : " + "ST" + Store.getStudentIndex());
         SubjectManagement.viewSubjectSelected(subjectIds);
         System.out.println("-----------------------\n");
         Thread.sleep(1000);
     }
+
     //수강생 전체 목록
     public static void inquiryStudent() throws InterruptedException {
         System.out.println("\n수강생 목록을 조회합니다...");
@@ -130,6 +133,7 @@ public class StudentManagement {
     //수강생 제거
     public static void removeStudent() {
     }
+
     //수강생 개인 정보 조회
     public static void searchStudent() {
     }
@@ -142,8 +146,89 @@ public class StudentManagement {
     //상태수정
     public static void setStatusStudent() {
     }
+
     //수강생 상태별 조회
     public static void inquiryStatusStudent() {
     }
+    // 4. 학번으로 해당하는 객체 인스턴스 가져오는 조회 매소드
+
+
+    //(1). 학번 입력 받기 : 사용자로부터 학번을 입력받음.
+
+    // user로 부터 학번을 입력받고, 입력된 학번이 유효한지 확인!
+    // 유효한 학번이 입력될 때까지 반복해서 입력을 받기.
+
+    private static String getStudentNumFromUser() {
+
+        String studentNum;
+
+        while (true) {
+            System.out.println("학번을 입력하세요 : ");
+            studentNum = sc.next();
+
+
+            // 입력된 학번이 유효한지 ? 확인하기!
+            if (isValidStudentNum(studentNum)) {
+                return studentNum;
+            } else {
+                System.out.println("유효하지 않은 학번입니다. 다시 입력하세요. ");
+            }
+        }
+    }
+    //(2). 학번이 있는지 없는지 체크(없을 경우 (예외처리 및 다시받기)
+    // == 학번 유효성 검사 : 입력된 학번이 유효한지 확인! , 유효하지 않은 학번일 경우 예외 처리!
+    // 입력된 학번이 유효한지를 검사하는 메소드,
+    // 입력된 학번이 "ST"로 시작하는지를 확인하여 유효성을 판단.
+
+    private static boolean isValidStudentNum(String studentNum) {
+        //private => 해당 멤버가 같은 클래스 내에서만 접근
+        // => isValidStudentId 메소드는 CampManagementApplication 클래스 내부에서만 접근 / 외부에서 호출 x
+        // isValidStudentNum => 주어진 학번이 유효한지 검사 => String 형식의 studentNum을 매개변수로 받아서 검사.
+        return studentNum.startsWith("ST");  //startsWith() 메소드는 문자열이 지정된 문자로 시작하는지 확인
+    }
+     //3). 학번에 맞는 학생 인스턴스 리턴
+
+
+    //(3-1). 학번에 해당하는 학생 객체 찾기
+    // 입력된 학번에 해당하는 학생 객체를 찾는 메소드
+    // 'studentStore'에 저장된 학생 객체들을 순회하면서 입력된 학번과 일치하는 학생 객체를 찾아 반환!
+    // 주어진 학번과 일치하는 학생 객체를 studentStore에서 찾아 반환하는 메소드인 findStudentByStudentNum
+
+    public static Student findStudentByStudentNum(String studentNum) {
+        for (Student student : Store.getStudentStore()) {
+            if (student.getStudentId().equals(studentNum)) {
+                return student;
+            }
+        }
+        return null; // 해당 학번에 해당하는 학생이 없을 경우 null 반환
+    }
+
+    //(3-2). 찾은 학생 객체 반환
+    // 위 과정을 통합하여 학번으로 해당하는 학생 객체를 찾아주는 메소드
+    // 학번을 입력받고, 입력된 학번의 유효성을 검사하고, 유효한 학번인 경우 findStudentByStudentNum를 통해 해당하는 학생 객체를 찾아 반환
+    // if 입력된 학번에 해당하는 학생이 없을 경우에는 예외 throw.
+
+    public static Student searchGetStudent() {
+        String studentNum;
+        Student student;
+
+        // 학번 입력 받기
+        do {
+            studentNum = getStudentNumFromUser();
+            // 학번 유효성 검사
+            if (!isValidStudentNum(studentNum)) {
+                System.out.println("유효하지 않은 학번입니다. 다시 입력하세요.");
+            }
+        } while (!isValidStudentNum(studentNum));
+
+        // 학번에 해당하는 학생 객체 찾기
+        student = findStudentByStudentNum(studentNum);
+        if (student == null) {
+            throw new IllegalArgumentException("해당 학번에 해당하는 학생이 없습니다.");
+        }
+
+        return student;
+    }
+
 
 }
