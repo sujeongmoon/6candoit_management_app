@@ -55,6 +55,7 @@ public class ScoreManagement {
 
     //점수 수정
     public static void modScore() throws InterruptedException {
+/*
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
@@ -68,7 +69,8 @@ public class ScoreManagement {
         int round = getRoundFromUser();
         int score = getScoreFromUser();
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
-        modifyscore.setScore(score, modifyscore;
+        modifyscore.setScore(score, modifyscore);
+*/
 
 
 
@@ -217,7 +219,7 @@ public class ScoreManagement {
 
         // (3) 수정할 점수 입력 및 점수 수정
         int newScore = getScoreFromUser();
-        updateScore(student, subject.getSubjectId(), round, newScore);
+      //  updateScore(student, subject.getSubjectId(), round, newScore);
     }
 
 // 학생 객체 찾기
@@ -276,7 +278,7 @@ public class ScoreManagement {
 
 
 
-//    private void updateScore(Student student, String subject, int round, int newScore) {
+    private void updateScore(Student student, String subject, int round, int newScore) {
 //        //학생의 점수를 수정
 //        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
 //        //List<Score> scores = student.getScores();
@@ -293,7 +295,7 @@ public class ScoreManagement {
 //        }
 
         // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-        throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
+ //       throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
     }
 
     // ------------------------------------------------------------------------------------------
