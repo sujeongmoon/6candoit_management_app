@@ -1,6 +1,7 @@
 package javateamproject.management;
 
 import javateamproject.model.Student;
+import javateamproject.model.Subject;
 import javateamproject.store.Store;
 import javateamproject.type.SubjectType;
 
@@ -132,14 +133,36 @@ public class StudentManagement {
     //담당 승완님
     //수강생 제거
     public static void removeStudent() {
+        System.out.println("삭제할 학번을 입력하세요:");
+        String studentNum = sc.next();
+        if(studentNum.equals(searchGetStudent().getStudentId())){
+            Store.deleteStudent(searchGetStudent().getStudentId());
+            System.out.println("삭제가 완료되었습니다");
+        } else{
+            System.out.println("학번이 일치하지 않습니다.");
+        }
     }
 
     //수강생 개인 정보 조회
     public static void searchStudent() {
+        try{
+            System.out.println("수강생의 이름은" + searchGetStudent().getStudentName()+ "입니다" );
+            System.out.println("수강생의 과목은"+ searchGetStudent().getStudentId() + "입니다");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     //수강생 이름 수정
     public static void updateStudentName() {
+        try{
+            System.out.println("변경 할 이름을 적어주세요.");
+            String studentName = sc.next();
+            searchGetStudent().setStudentName(studentName);
+            System.out.println("수정되었습니다" + studentName);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     ////담당 수정님
