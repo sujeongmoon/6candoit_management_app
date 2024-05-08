@@ -109,7 +109,7 @@ public class StudentManagement {
         System.out.println("수강생 등록 성공!\n");
         System.out.println("-----------------------");
         System.out.println("이름 : " + studentName);
-        System.out.println("학번 : " + "ST" + Store.getStudentIndex());
+        System.out.println("학번 : " + "ST" + (Store.getStudentIndex()));
         SubjectManagement.viewSubjectSelected(subjectIds);
         System.out.println("-----------------------\n");
         Thread.sleep(1000);
