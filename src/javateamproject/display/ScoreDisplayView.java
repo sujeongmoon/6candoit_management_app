@@ -7,7 +7,7 @@ public class ScoreDisplayView extends DisplayView {
 
 
     @Override
-    public void displayView() {
+    public static void displayView() {
         boolean flag = true;
 
         do {
