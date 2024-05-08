@@ -94,48 +94,50 @@ public class ScoreManagement {
         inquirySubjectGrades(student, subjectName);
     }
 
+
+
     //여기서부터 경민님
     // 수강생의 과목별 평균 등급 조회
     public static void inquiryStudentAverageBySubject() {
-        // 수강생 정보를 가져옵니다.
+        // 수강생 정보를 가져옴
         Student student = StudentManagement.searchGetStudent();
 
-        // 해당 수강생의 점수 목록을 가져옵니다.
+        // 해당 수강생의 점수 목록을 가져오기!
         List<Score> scores = Store.getScoreByStudentId(student.getStudentId());
 
-        // 각 과목별 점수를 합산하기 위한 맵을 생성합니다.
+        // 각 과목별 점수를 합산하기 위한 맵을 생성
         Map<String, Integer> subjectScores = new HashMap<>();
 
-        // 각 과목별로 점수를 합산합니다.
+        // 각 과목별로 점수를 합산
         for (Score score : scores) {
             String subjectId = score.getSubjectId();
             int scoreValue = score.getScore();
 
-            // 맵에 해당 과목이 이미 존재하면 이전 점수에 더합니다.
+            // 맵에 해당 과목이 이미 존재하면 이전 점수에 더하기!
             if (subjectScores.containsKey(subjectId)) {
                 int totalScore = subjectScores.get(subjectId);
                 subjectScores.put(subjectId, totalScore + scoreValue);
-            } else { // 과목이 맵에 없으면 새로운 항목을 추가합니다.
+            } else { // 과목이 맵에 없으면 새로운 항목을 추가!
                 subjectScores.put(subjectId, scoreValue);
             }
         }
 
-        // 과목별 평균 등급을 출력합니다.
+        // 과목별 평균 등급을 출력
         System.out.println("수강생 " + student.getStudentName() + "의 과목별 평균 등급:");
         for (String subjectId : subjectScores.keySet()) {
-            // 과목의 총 회차 수를 가져옵니다.
+            // 과목의 총 회차 수를 가져오기!
             int totalRounds = Store.getSubjectRoundsById(subjectId);
 
-            // 과목별 점수 합계를 가져옵니다.
+            // 과목별 점수 합계를 가져오기!
             int totalScore = subjectScores.get(subjectId);
 
-            // 평균 점수를 계산합니다.
+            // 평균 점수를 계산
             double averageScore = (double) totalScore / totalRounds;
 
-            // 과목명을 가져옵니다.
+            // 과목명을 가져오기!
             String subjectName = Store.getSubjectNameBySubjectId(subjectId);
 
-            // 평균 등급을 출력합니다.
+            // 평균 등급을 출력
             System.out.println(subjectName + ": " + averageScore);
         }
     }
@@ -147,52 +149,52 @@ public class ScoreManagement {
         String condition = "";
         List<Student> students = Store.getStudentsByCondition(condition);
 
-        // 각 수강생별로 필수 과목별 점수 합산을 저장할 맵을 생성합니다.
+        // 각 수강생별로 필수 과목별 점수 합산을 저장할 맵을 생성
         Map<String, Integer> totalScores = new HashMap<>();
 
-        // 각 수강생에 대해 반복합니다.
+        // 각 수강생에 대해 반복
         for (Student student : students) {
-            // 해당 수강생의 필수 과목 정보를 가져옵니다.
+            // 해당 수강생의 필수 과목 정보를 가져오기!
             List<String> requiredSubjects = student.getRequiredSubjects();
 
-            // 각 과목별로 점수를 합산합니다.
+            // 각 과목별로 점수를 합산
             for (String subjectId : requiredSubjects) {
-                // 해당 수강생의 해당 과목에 대한 점수를 가져옵니다.
+                // 해당 수강생의 해당 과목에 대한 점수를 가져오기
                 List<Score> scores = Store.getScoresByStudentAndSubject(student.getStudentId(), subjectId);
 
-                // 해당 과목의 총 회차 수를 가져옵니다.
+                // 해당 과목의 총 회차 수를 가져오기!
                 int totalRounds = Store.getSubjectRoundsById(subjectId);
 
-                // 해당 과목의 점수를 합산합니다.
+                // 해당 과목의 점수를 합산
                 int subjectTotalScore = 0;
                 for (Score score : scores) {
                     subjectTotalScore += score.getScore();
                 }
 
-                // 맵에 저장된 해당 과목의 이전 점수를 가져옵니다.
+                // 맵에 저장된 해당 과목의 이전 점수를 가져오기
                 int previousScore = totalScores.getOrDefault(subjectId, 0);
 
-                // 해당 과목의 점수를 누적하여 맵에 저장합니다.
+                // 해당 과목의 점수를 누적하여 맵에 저장
                 totalScores.put(subjectId, previousScore + subjectTotalScore);
             }
         }
 
-        // 각 수강생의 평균 등급을 출력합니다.
+        // 각 수강생의 평균 등급을 출력
         System.out.println("특정 상태 수강생들의 필수 과목 평균 등급:");
         for (String subjectId : totalScores.keySet()) {
-            // 해당 과목의 총 회차 수를 가져옵니다.
+            // 해당 과목의 총 회차 수를 가져오기!
             int totalRounds = Store.getSubjectRoundsById(subjectId);
 
-            // 해당 과목의 점수 합계를 가져옵니다.
+            // 해당 과목의 점수 합계를 가져오기!
             int totalScore = totalScores.get(subjectId);
 
-            // 평균 점수를 계산합니다.
+            // 평균 점수를 계산
             double averageScore = (double) totalScore / (totalRounds * students.size());
 
-            // 과목명을 가져옵니다.
+            // 과목명을 가져오기!
             String subjectName = Store.getSubjectNameBySubjectId(subjectId);
 
-            // 평균 등급을 출력합니다.
+            // 평균 등급을 출력!
             System.out.println(subjectName + ": " + averageScore);
         }
     }

@@ -212,31 +212,38 @@ public class Store {
     }
 
 
+
+
     // ㄱㅁ
 
-    // Store 클래스에 getSubjectRoundById 메서드 추가
+    // 학생과 과목에 대한 회차 수를 반환하는 메서드
+    // 학생의 번호 & 이름을 인자로 전달받고, 해당 학생이 수강한 과목에서 주어진 과목의 회차 수를 계산하는 메서드
     public static int getSubjectRoundsByStudentAndSubject(String studentNum, String studentName, String subjectId) {
-        // 주어진 학생 번호에 해당하는 학생을 찾습니다.
-        Optional<Student> optionalStudent = studentStore.stream()
+        // 주어진 학생 번호에 해당하는 학생을 찾음
+        Optional<Student> optionalStudent = studentStore.stream() //Optional을 사용하여 안전하게 처리
                 .filter(student -> student.getStudentId().equals(studentNum) && student.getStudentName().equals(studentName))
                 .findFirst();
 
         if (optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
             int totalRounds = 0;
-            // 학생이 수강한 과목에서 해당 과목의 회차 수를 계산합니다.
+            // 학생이 수강한 과목에서 해당 과목의 회차 수를 계산하기!
             for (String selectSubjectId : student.getSelectSubjectIds()) {
+                // 학생이 수강한 과목이 주어진 과목과 일치하는 경우에만! 회차 수 더하기.
                 if (selectSubjectId.equals(subjectId)) {
                     totalRounds += getSubjectRoundsById(subjectId);
                 }
             }
             return totalRounds;
-        } else {
+        } else { // 예외 처리
             throw new IllegalArgumentException("해당 학번과 이름에 해당하는 학생을 찾을 수 없습니다: " + studentNum + ", " + studentName);
         }
     }
 
+
     // 해당 학생과 과목에 대한 점수 목록을 반환하는 메서드
+    // 주어진 학생 ID와 과목 ID에 해당하는 점수를 찾아서 리스트로 반환
+    // 리스트에서 각 점수를 확인해 서로가 일치하는 경우에만 List에 추가!
     public static List<Score> getScoresByStudentAndSubject(String studentId, String subjectId) {
         List<Score> scores = new ArrayList<>();
         for (Score score : scoreStore) {
@@ -248,6 +255,8 @@ public class Store {
     }
 
     // 해당 과목의 총 회차 수를 반환하는 메서드
+    // 주어진 과목 ID에 해당하는 회차 수를 계산하여 반한!
+    // scoreStore 리스트에서 과목 id와 일치하는 점수를 찾고, 찾을때마다 회차 수를 증가 => 총 회차 수 반복
     public static int getSubjectRoundsById(String subjectId) {
         int totalRounds = 0;
         for (Score score : scoreStore) {
@@ -260,29 +269,26 @@ public class Store {
 
     // 특정 상태의 수강생을 필터링하여 반환하는 메서드
     public static List<Student> getStudentsByCondition(String condition) {
-        List<Student> filteredStudents = new ArrayList<>();
-        for (Student student : studentStore) {
-            if (student.getCondition().equals(condition)) {
+        List<Student> filteredStudents = new ArrayList<>(); // 필터링된 수강생을 저장할 List
+        for (Student student : studentStore) { // 모든 수강생을 반복하여 주어진 상태와 일치하는 수강생을 찾아냄
+            if (student.getCondition().equals(condition)) { // 수강생의 상태가 주어진 상태와 일치시 리스트에 추가!
                 filteredStudents.add(student);
             }
         }
-        return filteredStudents;
+        return filteredStudents; // 필터링된 수강생 리스트를 return
     }
-
-
-
 
 
 
     // 수강생의 필수 과목을 반환하는 메서드
     public List<String> getRequiredSubjects() {
-        List<String> requiredSubjects = new ArrayList<>();
-        for (Subject subject : subjectStore) {
-            if (subject.getSubjectType() == SubjectType.MUST) {
+        List<String> requiredSubjects = new ArrayList<>(); // 필수 과목을 저장할 List
+        for (Subject subject : subjectStore) { // 모든 과목을 반복하면서 필수 과목인지 확인
+            if (subject.getSubjectType() == SubjectType.MUST) { // 과목이 필수 과목인 경우에만 리스트에 추가!
                 requiredSubjects.add(subject.getSubjectId());
             }
         }
-        return requiredSubjects;
+        return requiredSubjects; // 필수 과목 List return
     }
 
 
