@@ -194,4 +194,5 @@ public class Store {
         addScore("ST02","SJ1",5,50,getSubjectTypeBySubjectId("SJ1"));
         addScore("ST02","SJ1",6,40,getSubjectTypeBySubjectId("SJ1"));
     }
+
 }
