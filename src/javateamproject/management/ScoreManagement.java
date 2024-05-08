@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static javateamproject.display.StudentDisplayView.displayInquiryStudent;
+
 
 public class ScoreManagement {
 
-    Scanner sc = new Scanner(System.in);
-
+    private static Scanner sc = new Scanner(System.in);
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
@@ -68,9 +67,8 @@ public class ScoreManagement {
         int round = getRoundFromUser();
         int score = getScoreFromUser();
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
-        modifyscore.setScore(score, modifyscore;
-
-
+        if (modifyscore == null) throw new AssertionError();
+        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(modifyscore.getSubjectId()));
 
     }
 
@@ -113,7 +111,6 @@ public class ScoreManagement {
 
     // 과목명을 입력받는 메소드
     private static String getSubjectNameFromUser(Student student) {
-        Scanner sc = new Scanner(System.in);
         Student.inquirySelectSubjectIds(student);
         String subjectNum;
         while(true) {
@@ -124,6 +121,7 @@ public class ScoreManagement {
             if (isValidStudentSubjects(student, subjectNum)) {
                 return subjectNum;
             } else {
+                System.out.println();
                 System.out.println("잘못 입력 하셨습니다.");
             }
         }
@@ -217,7 +215,7 @@ public class ScoreManagement {
 
         // (3) 수정할 점수 입력 및 점수 수정
         int newScore = getScoreFromUser();
-        updateScore(student, subject.getSubjectId(), round, newScore);
+        //updateScore(student, subject.getSubjectId(), round, newScore);
     }
 
 // 학생 객체 찾기
@@ -293,8 +291,7 @@ public class ScoreManagement {
 //        }
 
         // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-        throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
-    }
+
 
     // ------------------------------------------------------------------------------------------
 //7. void inquiryScoreAtStudent()
@@ -338,4 +335,10 @@ public class ScoreManagement {
             }
         }
     }
+
+
 }
+
+
+
+
