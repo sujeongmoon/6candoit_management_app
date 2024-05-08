@@ -3,6 +3,7 @@ package javateamproject.management;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
+import javateamproject.type.ConditionType;
 import javateamproject.type.SubjectType;
 
 import javax.swing.plaf.BorderUIResource;
@@ -186,28 +187,28 @@ public class StudentManagement {
         System.out.println("상태를 관리할 수강생의 학번을 입력해주세요.");
         Student student = searchGetStudent();
         System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.");
-        System.out.println(student.getStudentName() + "수강생의 상태를 입력해주세요.\n1. GREEN 2. YELLOW 3. RED ");
+        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1. GREEN 2. YELLOW 3. RED ");
 
         do {
             String conditionChoose = sc.next();
             switch (conditionChoose) {
                 case "1" -> {
-                    student.setCondition("GREEN");
+                    student.setCondition(ConditionType.GREEN);
                     flag = false;
                 }
                 case "2" -> {
-                    student.setCondition("YELLOW");
+                    student.setCondition(ConditionType.YELLOW);
                     flag = false;
                 }
                 case "3" -> {
-                    student.setCondition("RED");
+                    student.setCondition(ConditionType.RED);
                     flag = false;
                 }
-                default -> System.out.println("상태값을 잘못 입력하셨습니다. 다시 입력해주세요. ");
+                default -> System.out.println("상태값을 잘못 입력하셨습니다. 숫자로 다시 입력해주세요. ");
             }
         } while (flag);
 
-        System.out.println("변경된 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.");
+        System.out.println("변경된 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
         Thread.sleep(1000);
     }
 
@@ -215,36 +216,36 @@ public class StudentManagement {
     public static void inquiryConditionStudent() throws InterruptedException {
 
         boolean flag = true;
-        String inputCondition = "";
+        ConditionType inputCondition = null;
 
-        System.out.println("상태별 수강생을 조회합니다. 상태를 입력해주세요.\n1.GREEN 2.YELLOW 3. RED");
+        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.\n1. GREEN 2. YELLOW 3. RED");
 
         do {
             String conditionChoose = sc.next();
             switch (conditionChoose) {
                 case "1" -> {
-                    inputCondition = "Green";
+                    inputCondition = ConditionType.GREEN;
                     flag = false;
                 }
                 case "2" -> {
-                    inputCondition = "YELLOW";
+                    inputCondition = ConditionType.YELLOW;
                     flag = false;
                 }
                 case "3" -> {
-                    inputCondition = "RED";
+                    inputCondition = ConditionType.RED;
                     flag = false;
                 }
-                default -> System.out.println("상태값을 잘못 입력하셨습니다. 다시 입력해주세요. ");
+                default -> System.out.println("상태값을 잘못 입력하셨습니다. 숫자로 다시 입력해주세요. ");
             }
         } while (flag);
 
         for (int i = 0; i < Store.getStudentStore().size(); i++) {
-            if (inputCondition.equals(Store.getStudentStore().get(i).getCondition())) {
+            if (inputCondition == Store.getStudentStore().get(i).getCondition()) {
                 System.out.println(Store.getStudentStore().get(i).getStudentName() + "(" + Store.getStudentStore().get(i).getStudentId() + ")");
             }
 
         }
-        System.out.println(inputCondition + " 상태의 수강생이 전부 출력되었습니다.");
+        System.out.println(inputCondition + " 상태의 수강생이 전부 출력되었습니다.\n");
         Thread.sleep(1000);
     }
     // 4. 학번으로 해당하는 객체 인스턴스 가져오는 조회 매소드
