@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static javateamproject.display.StudentDisplayView.displayInquiryStudent;
+
 
 public class ScoreManagement {
 
-    Scanner sc = new Scanner(System.in);
-
+    private static Scanner sc = new Scanner(System.in);
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
@@ -49,13 +48,13 @@ public class ScoreManagement {
         Store.addScore(student.getStudentId(),subjectName,round,score,Store.getSubjectTypeBySubjectId(subjectName));
 
         System.out.println("점수가 성공적으로 등록되었습니다.");
-        ScoreDisplayView.displayView();
+        System.out.println("");
+
 
     }
 
     //점수 수정
     public static void modScore() throws InterruptedException {
-/*
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
@@ -65,13 +64,24 @@ public class ScoreManagement {
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
         String subjectName = getSubjectNameFromUser(student);
 
-        //(3) 회차/점수 입력받기
+        //(3) 회차/점수 목록 출력
+        inquirySubjectGrades(student, subjectName);
+
+        //(4) 회차/점수 입력받기
         int round = getRoundFromUser();
         int score = getScoreFromUser();
-        Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
-        modifyscore.setScore(score, modifyscore);
-*/
 
+
+        //(5) 해당 회차 점수 수정
+        Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
+
+        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(subjectName));
+
+        System.out.println("점수가 성공적으로 수정 되었습니다.");
+        System.out.println("");
+
+        if (modifyscore == null) throw new AssertionError();
+        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(modifyscore.getSubjectId()));
 
 
     }
@@ -115,7 +125,6 @@ public class ScoreManagement {
 
     // 과목명을 입력받는 메소드
     private static String getSubjectNameFromUser(Student student) {
-        Scanner sc = new Scanner(System.in);
         Student.inquirySelectSubjectIds(student);
         String subjectNum;
         while(true) {
@@ -126,6 +135,7 @@ public class ScoreManagement {
             if (isValidStudentSubjects(student, subjectNum)) {
                 return subjectNum;
             } else {
+                System.out.println();
                 System.out.println("잘못 입력 하셨습니다.");
             }
         }
@@ -209,7 +219,20 @@ public class ScoreManagement {
 // 점수 수정
 // 6. void setScoreAtStudent() {
 
-    public static void setScoreAtStudent() {
+
+//    public static void setScoreAtStudent() {
+//        // (1) 해당하는 학번 학생 인스턴스 가져오기
+//        Student student = StudentManagement.searchGetStudent();
+//
+//        // (2) 선택된 학생의 과목 정보와 회차 비교해서 과목 회차 입력받기
+//        Subject subject = getSubjectFromUser(student);
+//        int round = getRoundFromUser(subject);
+//
+//        // (3) 수정할 점수 입력 및 점수 수정
+//        int newScore = getScoreFromUser();
+//        updateScore(student, subject.getSubjectId(), round, newScore);
+//    }
+ public static void setScoreAtStudent() {
         // (1) 해당하는 학번 학생 인스턴스 가져오기
         Student student = StudentManagement.searchGetStudent();
 
@@ -219,8 +242,10 @@ public class ScoreManagement {
 
         // (3) 수정할 점수 입력 및 점수 수정
         int newScore = getScoreFromUser();
-      //  updateScore(student, subject.getSubjectId(), round, newScore);
+        //updateScore(student, subject.getSubjectId(), round, newScore);
+
     }
+
 
 // 학생 객체 찾기
 
@@ -278,12 +303,29 @@ public class ScoreManagement {
 
 
 
-    private void updateScore(Student student, String subject, int round, int newScore) {
-//        //학생의 점수를 수정
-//        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
-//        //List<Score> scores = student.getScores();
-//        List<Score> scores = Store.getScoreByStudentId(student.getStudentId());//임시
+
+////    private void updateScore(Student student, String subject, int round, int newScore) {
+////        //학생의 점수를 수정
+////        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
+////        //List<Score> scores = student.getScores();
+////        List<Score> scores = Store.getScoreByStudentId(student.getStudentId());//임시
+////
+////        // 해당 과목과 회차에 대한 점수 찾기
+////        for (Score score : scores) {
+////            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
+////                // 해당 점수를 새로운 점수로 업데이트
+////                score.setScore(newScore, SubjectType.MUST);
+////                System.out.println("점수가 성공적으로 수정되었습니다.");
+////                return;
+////            }
+////        }
+
 //
+
+//        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
+//        throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
+//    }
+
 //        // 해당 과목과 회차에 대한 점수 찾기
 //        for (Score score : scores) {
 //            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
@@ -294,13 +336,13 @@ public class ScoreManagement {
 //            }
 //        }
 
-        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
- //       throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
-    }
+
+
+
 
     // ------------------------------------------------------------------------------------------
 //7. void inquiryScoreAtStudent()
-   public static void inquirySubjectGrades(Student student, String subjectName) {
+   public static void inquirySubjectGrades(Student student, String subjectName) throws InterruptedException {
 
         List<Score> scores = Store.getScoreStore().stream()
                 .filter(a -> a.getSubjectId().equals(subjectName)  && a.getStudentId().equals(student.getStudentId()))
@@ -308,9 +350,9 @@ public class ScoreManagement {
 
                  //이거 optional 해줘야될거 같은데 이따가 질문
         for (Score score : scores){
-            System.out.println(score.getRound() + "회차 : " + score.getGrade() + " 등급");
+            System.out.print("["+score.getRound() + "회차 : " + score.getGrade() + " 등급]  ");
         }
-
+    Thread.sleep(500);
     }
 
 
@@ -340,4 +382,10 @@ public class ScoreManagement {
             }
         }
     }
+
+
 }
+
+
+
+

@@ -1,6 +1,5 @@
 package javateamproject.model;
 
-
 import javateamproject.management.SubjectManagement;
 
 import javateamproject.type.ConditionType;
