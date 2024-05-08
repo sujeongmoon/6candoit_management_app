@@ -68,7 +68,7 @@ public class ScoreManagement {
         int round = getRoundFromUser();
         int score = getScoreFromUser();
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
-        modifyscore.setScore(score);
+        modifyscore.setScore(score, modifyscore;
 
 
 
