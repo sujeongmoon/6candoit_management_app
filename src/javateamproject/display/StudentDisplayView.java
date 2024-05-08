@@ -34,7 +34,7 @@ public class StudentDisplayView extends DisplayView{
             switch (choose) {
                 case "1" -> StudentManagement.inquiryStudent();
                 case "2" -> StudentManagement.searchStudent();
-                case "3" -> StudentManagement.inquiryStatusStudent();
+                case "3" -> StudentManagement.inquiryConditionStudent();
                 case "4" -> flag = false;
                 default -> {
                     System.out.println("1~4까지의 정숫를 입력해주세요\n");
@@ -42,7 +42,7 @@ public class StudentDisplayView extends DisplayView{
             }
         } while (flag);
     }
-    private static void displayUpdateStudent(){
+    private static void displayUpdateStudent() throws InterruptedException {
         boolean flag = true;
         do {
             System.out.println("1. 이름 수정\n2. 상태 수정(관리)\n3. 메인 화면 이동\n");
@@ -50,7 +50,7 @@ public class StudentDisplayView extends DisplayView{
             String choose = sc.next();//nextLine 하려면 앞에 정수 입력하고 남은 엔터키 받아주는거 필요
             switch (choose) {
                 case "1" -> StudentManagement.updateStudentName();
-                case "2" -> StudentManagement.setStatusStudent();
+                case "2" -> StudentManagement.setConditionStudent();
                 case "3" -> {
                     flag = false;
                 }
