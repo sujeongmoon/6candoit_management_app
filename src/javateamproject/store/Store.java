@@ -173,15 +173,25 @@ public class Store {
         return null;
     }
     private static void dummy(){
-        addStudent("강호동", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
-        addStudent("유재석", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
-        addStudent("장원영", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
-        addStudent("김지민", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
-        addScore("ST01","SJ01",1,90,getSubjectTypeBySubjectId("SJ01"));
-        addScore("ST01","SJ01",2,30,getSubjectTypeBySubjectId("SJ01"));
-        addScore("ST01","SJ01",3,40,getSubjectTypeBySubjectId("SJ01"));
-        addScore("ST01","SJ02",1,90,getSubjectTypeBySubjectId("SJ02"));
-        addScore("ST01","SJ03",1,30,getSubjectTypeBySubjectId("SJ03"));
-        addScore("ST01","SJ05",1,40,getSubjectTypeBySubjectId("SJ05"));
+        addStudent("강호동", Arrays.asList("SJ2","SJ1","SJ3","SJ5","SJ6"));
+        addStudent("유재석", Arrays.asList("SJ2","SJ1","SJ3","SJ5","SJ6"));
+        addStudent("장원영", Arrays.asList("SJ2","SJ1","SJ3","SJ05","SJ6"));
+        addStudent("김지민", Arrays.asList("SJ2","SJ1","SJ3","SJ05","SJ6"));
+        addStudent("함날두", Arrays.asList("SJ2","SJ1","SJ3","SJ05","SJ6"));
+        addStudent("홍길동", Arrays.asList("SJ2","SJ1","SJ3","SJ05","SJ6"));
+        addStudent("문수정", Arrays.asList("SJ0","SJ1","SJ2","SJ03","SJ4","SJ5","SJ6","SJ7","SJ8"));
+        addScore("ST01","SJ1",1,90,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST01","SJ1",2,70,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST01","SJ1",3,40,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST01","SJ2",1,90,getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST01","SJ3",1,60,getSubjectTypeBySubjectId("SJ3"));
+        addScore("ST01","SJ5",1,60,getSubjectTypeBySubjectId("SJ5"));
+        addScore("ST01","SJ6",1,80,getSubjectTypeBySubjectId("SJ6"));
+        addScore("ST02","SJ1",1,90,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST02","SJ1",2,80,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST02","SJ1",3,70,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST02","SJ1",4,60,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST02","SJ1",5,50,getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST02","SJ1",6,40,getSubjectTypeBySubjectId("SJ1"));
     }
 }
