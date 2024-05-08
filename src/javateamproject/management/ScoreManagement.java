@@ -71,6 +71,18 @@ public class ScoreManagement {
         int round = getRoundFromUser();
         int score = getScoreFromUser();
 
+        // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
+        if (!isValidRound(round) || !isValidScore(score)) {
+            System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
+            return; // 잘못된 입력이 있을 경우 메소드 종료
+        }
+
+        // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
+        if (isScoreExist(student, subjectName, round)) {
+            System.out.println("이미 해당 과목의 회차 점수가 등록되어 있습니다.");
+            return; // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+        }
+
         //(5) 해당 회차 점수 수정
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
 
