@@ -159,6 +159,7 @@ public class StudentManagement {
     //수강생 이름 수정
     public static void updateStudentName() {
         try{
+            System.out.println(searchGetStudent().getStudentName());
             System.out.println("변경 할 이름을 적어주세요.");
             String studentName = sc.next();
             searchGetStudent().setStudentName(studentName);
