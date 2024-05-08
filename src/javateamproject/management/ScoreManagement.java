@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static javateamproject.display.StudentDisplayView.displayInquiryStudent;
+
 
 public class ScoreManagement {
 
-    Scanner sc = new Scanner(System.in);
-
+    private static Scanner sc = new Scanner(System.in);
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
@@ -74,10 +73,15 @@ public class ScoreManagement {
 
         //(5) 해당 회차 점수 수정
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
+
         modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(subjectName));
 
         System.out.println("점수가 성공적으로 수정 되었습니다.");
         System.out.println("");
+
+        if (modifyscore == null) throw new AssertionError();
+        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(modifyscore.getSubjectId()));
+
 
     }
 
@@ -120,7 +124,6 @@ public class ScoreManagement {
 
     // 과목명을 입력받는 메소드
     private static String getSubjectNameFromUser(Student student) {
-        Scanner sc = new Scanner(System.in);
         Student.inquirySelectSubjectIds(student);
         String subjectNum;
         while(true) {
@@ -131,6 +134,7 @@ public class ScoreManagement {
             if (isValidStudentSubjects(student, subjectNum)) {
                 return subjectNum;
             } else {
+                System.out.println();
                 System.out.println("잘못 입력 하셨습니다.");
             }
         }
@@ -214,6 +218,7 @@ public class ScoreManagement {
 // 점수 수정
 // 6. void setScoreAtStudent() {
 
+
 //    public static void setScoreAtStudent() {
 //        // (1) 해당하는 학번 학생 인스턴스 가져오기
 //        Student student = StudentManagement.searchGetStudent();
@@ -226,6 +231,19 @@ public class ScoreManagement {
 //        int newScore = getScoreFromUser();
 //        updateScore(student, subject.getSubjectId(), round, newScore);
 //    }
+ public static void setScoreAtStudent() {
+        // (1) 해당하는 학번 학생 인스턴스 가져오기
+        Student student = StudentManagement.searchGetStudent();
+
+        // (2) 선택된 학생의 과목 정보와 회차 비교해서 과목 회차 입력받기
+        Subject subject = getSubjectFromUser(student);
+        int round = getRoundFromUser(subject);
+
+        // (3) 수정할 점수 입력 및 점수 수정
+        int newScore = getScoreFromUser();
+        //updateScore(student, subject.getSubjectId(), round, newScore);
+    }
+
 
 // 학생 객체 찾기
 
@@ -299,9 +317,24 @@ public class ScoreManagement {
 ////            }
 ////        }
 //
+
 //        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
 //        throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
 //    }
+
+//        // 해당 과목과 회차에 대한 점수 찾기
+//        for (Score score : scores) {
+//            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
+//                // 해당 점수를 새로운 점수로 업데이트
+//                score.setScore(newScore, SubjectType.MUST);
+//                System.out.println("점수가 성공적으로 수정되었습니다.");
+//                return;
+//            }
+//        }
+
+        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
+
+
 
     // ------------------------------------------------------------------------------------------
 //7. void inquiryScoreAtStudent()
@@ -345,4 +378,10 @@ public class ScoreManagement {
             }
         }
     }
+
+
 }
+
+
+
+
