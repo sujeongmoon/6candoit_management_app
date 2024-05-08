@@ -88,13 +88,13 @@ public class StudentManagement {
             System.out.println("선택과목 " + count + "개 입력하셨습니다.");
             System.out.print("\n선택한 과목 목록 입니다.");
             SubjectManagement.viewSubjectSelected(subjectIds);
-            if (count >= 5) {
+            if (count >= 4) {
                 System.out.println("\n 모든 과목을 입력하셨습니다.");
                 break;
             }
-            if (count >= 3) {
+            if (count >= 2) {
                 System.out.println("\n 선택 과목을 2개 이상을 입력하셨습니다.");
-                System.out.println("더 많은 필수 과목을 듣고 싶으시면 'y'를 입력하세요");
+                System.out.println("더 많은 선택 과목을 듣고 싶으시면 'y'를 입력하세요");
                 String sw = sc.next();
                 if (!sw.equalsIgnoreCase("Y")) {
                     break;
