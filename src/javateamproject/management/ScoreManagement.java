@@ -1,22 +1,17 @@
 package javateamproject.management;
 
-import javateamproject.display.ScoreDisplayView;
 import javateamproject.model.Score;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
-import javateamproject.type.SubjectType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
-
+import java.util.*;
 
 
 public class ScoreManagement {
 
     private static Scanner sc = new Scanner(System.in);
+
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
@@ -45,7 +40,7 @@ public class ScoreManagement {
             System.out.println("이미 해당 과목의 회차 점수가 등록되어 있습니다.");
             return; // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
         }
-        Store.addScore(student.getStudentId(),subjectName,round,score,Store.getSubjectTypeBySubjectId(subjectName));
+        Store.addScore(student.getStudentId(), subjectName, round, score, Store.getSubjectTypeBySubjectId(subjectName));
 
         System.out.println("점수가 성공적으로 등록되었습니다.");
         System.out.println("");
@@ -100,20 +95,113 @@ public class ScoreManagement {
     }
 
     //여기서부터 경민님
-    //수강생의 과목별 평균 등급을 조회
+    // 수강생의 과목별 평균 등급 조회
     public static void inquiryStudentAverageBySubject() {
+        // 수강생 정보를 가져옵니다.
+        Student student = StudentManagement.searchGetStudent();
+
+        // 해당 수강생의 점수 목록을 가져옵니다.
+        List<Score> scores = Store.getScoreByStudentId(student.getStudentId());
+
+        // 각 과목별 점수를 합산하기 위한 맵을 생성합니다.
+        Map<String, Integer> subjectScores = new HashMap<>();
+
+        // 각 과목별로 점수를 합산합니다.
+        for (Score score : scores) {
+            String subjectId = score.getSubjectId();
+            int scoreValue = score.getScore();
+
+            // 맵에 해당 과목이 이미 존재하면 이전 점수에 더합니다.
+            if (subjectScores.containsKey(subjectId)) {
+                int totalScore = subjectScores.get(subjectId);
+                subjectScores.put(subjectId, totalScore + scoreValue);
+            } else { // 과목이 맵에 없으면 새로운 항목을 추가합니다.
+                subjectScores.put(subjectId, scoreValue);
+            }
+        }
+
+        // 과목별 평균 등급을 출력합니다.
+        System.out.println("수강생 " + student.getStudentName() + "의 과목별 평균 등급:");
+        for (String subjectId : subjectScores.keySet()) {
+            // 과목의 총 회차 수를 가져옵니다.
+            int totalRounds = Store.getSubjectRoundsById(subjectId);
+
+            // 과목별 점수 합계를 가져옵니다.
+            int totalScore = subjectScores.get(subjectId);
+
+            // 평균 점수를 계산합니다.
+            double averageScore = (double) totalScore / totalRounds;
+
+            // 과목명을 가져옵니다.
+            String subjectName = Store.getSubjectNameBySubjectId(subjectId);
+
+            // 평균 등급을 출력합니다.
+            System.out.println(subjectName + ": " + averageScore);
+        }
     }
 
-    //수강생 상태별 평균 등급을 조회
+
+    // 특정 상태 수강생들의 필수 과목 평균 등급 조회
     public static void inquiryStudentAverageByStatus() {
+        //특정 상태의 수강생을 필터링하여 가져오기!
+        String condition = "";
+        List<Student> students = Store.getStudentsByCondition(condition);
+
+        // 각 수강생별로 필수 과목별 점수 합산을 저장할 맵을 생성합니다.
+        Map<String, Integer> totalScores = new HashMap<>();
+
+        // 각 수강생에 대해 반복합니다.
+        for (Student student : students) {
+            // 해당 수강생의 필수 과목 정보를 가져옵니다.
+            List<String> requiredSubjects = student.getRequiredSubjects();
+
+            // 각 과목별로 점수를 합산합니다.
+            for (String subjectId : requiredSubjects) {
+                // 해당 수강생의 해당 과목에 대한 점수를 가져옵니다.
+                List<Score> scores = Store.getScoresByStudentAndSubject(student.getStudentId(), subjectId);
+
+                // 해당 과목의 총 회차 수를 가져옵니다.
+                int totalRounds = Store.getSubjectRoundsById(subjectId);
+
+                // 해당 과목의 점수를 합산합니다.
+                int subjectTotalScore = 0;
+                for (Score score : scores) {
+                    subjectTotalScore += score.getScore();
+                }
+
+                // 맵에 저장된 해당 과목의 이전 점수를 가져옵니다.
+                int previousScore = totalScores.getOrDefault(subjectId, 0);
+
+                // 해당 과목의 점수를 누적하여 맵에 저장합니다.
+                totalScores.put(subjectId, previousScore + subjectTotalScore);
+            }
+        }
+
+        // 각 수강생의 평균 등급을 출력합니다.
+        System.out.println("특정 상태 수강생들의 필수 과목 평균 등급:");
+        for (String subjectId : totalScores.keySet()) {
+            // 해당 과목의 총 회차 수를 가져옵니다.
+            int totalRounds = Store.getSubjectRoundsById(subjectId);
+
+            // 해당 과목의 점수 합계를 가져옵니다.
+            int totalScore = totalScores.get(subjectId);
+
+            // 평균 점수를 계산합니다.
+            double averageScore = (double) totalScore / (totalRounds * students.size());
+
+            // 과목명을 가져옵니다.
+            String subjectName = Store.getSubjectNameBySubjectId(subjectId);
+
+            // 평균 등급을 출력합니다.
+            System.out.println(subjectName + ": " + averageScore);
+        }
     }
+
 
     // 5. 점수 입력 메소드
 
 
     // 점수 객체 생성 및 저장
-
-
 
 
 //------- 위 코드에서 사용되는 메소드들 -------
@@ -126,7 +214,7 @@ public class ScoreManagement {
     private static String getSubjectNameFromUser(Student student) {
         Student.inquirySelectSubjectIds(student);
         String subjectNum;
-        while(true) {
+        while (true) {
             System.out.println("과목을 입력하세요 : ");
             subjectNum = sc.nextLine();
 
@@ -197,7 +285,6 @@ public class ScoreManagement {
     }
 
 
-
     // 해당 과목의 해당 회차 점수가 이미 등록되어 있는지 확인하는 메소드
     private static boolean isScoreExist(Student student, String subjectName, int round) {
         if (Store.getScoreBy(student.getStudentId(), subjectName, round) != null) return true;
@@ -219,7 +306,7 @@ public class ScoreManagement {
 // 6. void setScoreAtStudent() {
 
 
-//    public static void setScoreAtStudent() {
+    //    public static void setScoreAtStudent() {
 //        // (1) 해당하는 학번 학생 인스턴스 가져오기
 //        Student student = StudentManagement.searchGetStudent();
 //
@@ -231,7 +318,7 @@ public class ScoreManagement {
 //        int newScore = getScoreFromUser();
 //        updateScore(student, subject.getSubjectId(), round, newScore);
 //    }
- public static void setScoreAtStudent() {
+    public static void setScoreAtStudent() {
         // (1) 해당하는 학번 학생 인스턴스 가져오기
         Student student = StudentManagement.searchGetStudent();
 
@@ -300,7 +387,6 @@ public class ScoreManagement {
     // 학생의 점수 수정
 
 
-
 ////    private void updateScore(Student student, String subject, int round, int newScore) {
 ////        //학생의 점수를 수정
 ////        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
@@ -332,25 +418,23 @@ public class ScoreManagement {
 //            }
 //        }
 
-        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-
+    // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
 
 
     // ------------------------------------------------------------------------------------------
 //7. void inquiryScoreAtStudent()
-   public static void inquirySubjectGrades(Student student, String subjectName) throws InterruptedException {
+    public static void inquirySubjectGrades(Student student, String subjectName) throws InterruptedException {
 
         List<Score> scores = Store.getScoreStore().stream()
-                .filter(a -> a.getSubjectId().equals(subjectName)  && a.getStudentId().equals(student.getStudentId()))
+                .filter(a -> a.getSubjectId().equals(subjectName) && a.getStudentId().equals(student.getStudentId()))
                 .toList();
 
-                 //이거 optional 해줘야될거 같은데 이따가 질문
-        for (Score score : scores){
-            System.out.print("["+score.getRound() + "회차 : " + score.getGrade() + " 등급]  ");
+        //이거 optional 해줘야될거 같은데 이따가 질문
+        for (Score score : scores) {
+            System.out.print("[" + score.getRound() + "회차 : " + score.getGrade() + " 등급]  ");
         }
-    Thread.sleep(500);
+        Thread.sleep(500);
     }
-
 
 
     // 점수 조회
