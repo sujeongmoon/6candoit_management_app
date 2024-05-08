@@ -160,10 +160,19 @@ public class StudentManagement {
     //수강생 이름 수정
     public static void updateStudentName() {
         try{
+            System.out.println(searchGetStudent().getStudentName());
             System.out.println("변경 할 이름을 적어주세요.");
             String studentName = sc.next();
-            searchGetStudent().setStudentName(studentName);
-            System.out.println("수정되었습니다 " + studentName + "님");
+            System.out.println(studentName+" 으로 하시겠습니까? 맞으면 y");
+            String yesOrNo = sc.next();
+            if(yesOrNo.equals("y") || yesOrNo.equals("Y")){
+                searchGetStudent().setStudentName(studentName);
+                System.out.println("수정되었습니다 " + studentName + "님");
+            } else{
+                System.out.println("수정페이지로 이동합니다...");
+            }
+
+
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
