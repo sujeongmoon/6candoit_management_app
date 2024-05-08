@@ -4,7 +4,7 @@ import javateamproject.management.StudentManagement;
 
 import java.util.Scanner;
 
-public class studentDisplayView extends DisplayView{
+public class StudentDisplayView extends DisplayView{
     public static void displayView() throws InterruptedException {
         boolean flag = true;
         do {

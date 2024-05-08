@@ -10,10 +10,10 @@ public class MainDisplay extends DisplayView{
             String choose = sc.next();
             switch (choose) {
                 case "1": //학생관리
-                    studentDisplayView.displayView();
+                    StudentDisplayView.displayView();
                     break;
                 case "2": //성적관리
-                    scoreDisplayView.displayView();
+                    ScoreDisplayView.displayView();
                     break;
                 case "3":
                     flag = false;

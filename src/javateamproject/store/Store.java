@@ -143,6 +143,31 @@ public class Store {
         }
         return names;
     }
-
-
+    //해당 과복번호로 타입 가져오기
+    public static SubjectType getSubjectTypeBySubjectId(String subjectId){
+        for(Subject s : subjectStore){
+            if(s.getSubjectId().equals(subjectId)) return s.getSubjectType();
+        }
+        return null;
+    }
+    public static String getSubjectNameBySubjectId(String subjectId){
+        for(Subject s : subjectStore){
+            if(s.getSubjectId().equals(subjectId)) return s.getSubjectName();
+        }
+        return null;
+    }
+    //학생번호, 과목 번호, 회차 번호 받아서 스코어 객체 접근하기
+    public static Score getScoreBy(String studentId, String subjectId,int round) {
+        Optional<Score> result = scoreStore.stream()
+                .filter(score -> score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjectId) && score.getRound() == round)
+                .findFirst();
+        if(result.isPresent()) return result.get();
+        return null;
+    }
+    public static Subject getSubjectBySubjectId(String subjectId){
+        for(Subject s : subjectStore){
+            if(s.getSubjectId().equals(subjectId)) return s;
+        }
+        return null;
+    }
 }

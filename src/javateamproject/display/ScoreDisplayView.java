@@ -4,7 +4,7 @@ import javateamproject.management.ScoreManagement;
 
 import java.util.Scanner;
 
-public class scoreDisplayView extends DisplayView {
+public class ScoreDisplayView extends DisplayView {
     public static void displayView() {
         boolean flag = true;
 
