@@ -1,6 +1,10 @@
 package javateamproject.model;
 
+<<<<<<< HEAD
+import javateamproject.management.SubjectManagement;
+=======
 import javateamproject.type.ConditionType;
+>>>>>>> 6be57d2f962b7c1b3387796cba3eaf15ba565280
 
 import java.util.List;
 
@@ -36,7 +40,15 @@ public class Student {
     public void setCondition(ConditionType condition) {
         this.condition = condition;
     }
-}
+
+    // 수강과목 리스트 띄우기
+    public static void inquirySelectSubjectIds (Student student) {
+        System.out.println("과목 목록:");
+        SubjectManagement.viewSubjectSelected(student.getSelectSubjectIds());
+        }
+    }
+
+
 
 
 

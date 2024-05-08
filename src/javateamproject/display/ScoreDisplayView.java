@@ -5,7 +5,7 @@ import javateamproject.management.ScoreManagement;
 import java.util.Scanner;
 
 public class ScoreDisplayView extends DisplayView {
-    public static void displayView() {
+    public static void displayView() throws InterruptedException {
         boolean flag = true;
 
         do {
@@ -26,7 +26,7 @@ public class ScoreDisplayView extends DisplayView {
             }
         } while (flag);
     }
-    public static void displayInquiryScore() {
+    public static void displayInquiryScore() throws InterruptedException {
         boolean flag = true;
         do {
             System.out.println("1. 수강생 과복별 시험 회차 등급 조회\n2. 수강생의 과목별 평균 등급을 조회\n3. 수강생 상태별 평균 등급을 조회\n4. 점수관리 화면 이동\n");
