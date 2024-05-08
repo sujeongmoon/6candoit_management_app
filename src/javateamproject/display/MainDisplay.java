@@ -1,24 +1,12 @@
-import java.util.*;
+package javateamproject.display;
 
-public class Main {
-    private static final StudentDisplayView studentDisplayView = new StudentDisplayView();
-    private static final ScoreDisplayView scoreDisplayView = new ScoreDisplayView();
+import java.util.Scanner;
 
-
-    private static Scanner sc = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        try {
-            displayMain();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void displayMain() {
+public class MainDisplay extends DisplayView{
+    public static void displayMain() throws InterruptedException {
         boolean flag = true;
         do {
-            System.out.println("메인페이지입니다\n숫자를 입력해주세요! \n1.학생관리 2.성적관리  3.나가기");
+            System.out.println("메인페이지입니다\n숫자를 입력해주세요! \n1.수강생 관리 2.성적관리  3.나가기");
             String choose = sc.next();
             switch (choose) {
                 case "1": //학생관리
