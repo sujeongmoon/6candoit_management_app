@@ -7,6 +7,7 @@ import javateamproject.type.ClassType;
 import javateamproject.type.SubjectType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 //저장소 기능 추가, 검색, 접근, 삭제 오직!//여기올때 오레 체크 완료
@@ -68,6 +69,7 @@ public class Store {
                         SubjectType.CHOICE
                 )
         );
+        dummy();
     }
 
     private static String sequence(ClassType classtype) {
@@ -100,15 +102,15 @@ public class Store {
     }
 
     public static int getScoreIndex() {
-        return scoreIndex;
+        return scoreIndex-1;
     }
 
     public static int getStudentIndex() {
-        return studentIndex;
+        return studentIndex-1;
     }
 
     public static int getSubjectIndex() {
-        return subjectIndex;
+        return subjectIndex-1;
     }
 
     //학생 추가
@@ -169,5 +171,17 @@ public class Store {
             if(s.getSubjectId().equals(subjectId)) return s;
         }
         return null;
+    }
+    private static void dummy(){
+        addStudent("강호동", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
+        addStudent("유재석", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
+        addStudent("장원영", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
+        addStudent("김지민", Arrays.asList("SJ02","SJ01","SJ03","SJ05","SJ06"));
+        addScore("ST01","SJ01",1,90,getSubjectTypeBySubjectId("SJ01"));
+        addScore("ST01","SJ01",2,30,getSubjectTypeBySubjectId("SJ01"));
+        addScore("ST01","SJ01",3,40,getSubjectTypeBySubjectId("SJ01"));
+        addScore("ST01","SJ02",1,90,getSubjectTypeBySubjectId("SJ02"));
+        addScore("ST01","SJ03",1,30,getSubjectTypeBySubjectId("SJ03"));
+        addScore("ST01","SJ05",1,40,getSubjectTypeBySubjectId("SJ05"));
     }
 }
