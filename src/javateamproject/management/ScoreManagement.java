@@ -332,49 +332,6 @@ public class ScoreManagement {
     // 학생의 점수 수정
 
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 4a65df5c02e282d35d9b6166baa12711a56f6931
-////    private void updateScore(Student student, String subject, int round, int newScore) {
-////        //학생의 점수를 수정
-////        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
-////        //List<Score> scores = student.getScores();
-////        List<Score> scores = Store.getScoreByStudentId(student.getStudentId());//임시
-////
-////        // 해당 과목과 회차에 대한 점수 찾기
-////        for (Score score : scores) {
-////            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
-////                // 해당 점수를 새로운 점수로 업데이트
-////                score.setScore(newScore, SubjectType.MUST);
-////                System.out.println("점수가 성공적으로 수정되었습니다.");
-////                return;
-////            }
-////        }
-
-//
-
-//        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-//        throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
-//    }
-
-//        // 해당 과목과 회차에 대한 점수 찾기
-//        for (Score score : scores) {
-//            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
-//                // 해당 점수를 새로운 점수로 업데이트
-//                score.setScore(newScore, SubjectType.MUST);
-//                System.out.println("점수가 성공적으로 수정되었습니다.");
-//                return;
-//            }
-//        }
-
-<<<<<<< HEAD
-
-
-=======
-    // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
->>>>>>> 4a65df5c02e282d35d9b6166baa12711a56f6931
 
 
     // ------------------------------------------------------------------------------------------

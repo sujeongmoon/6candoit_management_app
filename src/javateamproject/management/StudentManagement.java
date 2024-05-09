@@ -189,9 +189,9 @@ public class StudentManagement {
         Student student = searchGetStudent();
         System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
 
-        for (int i = 0; i < ConditionType.values().length; i++){
-
-        }
+//        for (int i = 0; i < ConditionType.values().length; i++){
+//
+//        }
 
         System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.");
 
