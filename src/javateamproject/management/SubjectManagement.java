@@ -1,5 +1,6 @@
 package javateamproject.management;
 
+import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
 import javateamproject.type.SubjectType;
@@ -38,5 +39,41 @@ public class SubjectManagement {
             }
         }
         System.out.println();
+    }
+
+    static String getSubjectIdFromUserAtAdd(Student student) {
+        while(true) {
+            List<String> selectedSubjects = student.getSelectSubjectIds();
+
+            viewSubjectSelected(selectedSubjects);
+            System.out.print("과목을 입력하세요 : ");
+            String subjectNum = sc.nextLine();
+
+            // 입력된 과목이 유효한지 확인
+            if (selectedSubjects.contains(subjectNum)) {
+                return subjectNum;
+            } else {
+                System.out.println();
+                System.out.println("잘못입력되었습니다.");
+            }
+        }
+    }
+
+    // 과목명을 입력받는 메소드
+    public static String getSubjectNameFromUser(Student student) {
+        Student.inquirySelectSubjectIds(student);
+        String subjectNum;
+        while(true) {
+            System.out.print("과목을 입력하세요 : ");
+            subjectNum = sc.nextLine();
+
+            // 입력된 과목이 유효한지 확인
+            if (ScoreManagement.isScoreExistBySubjectId(student.getStudentId(), subjectNum)) {
+                return subjectNum;
+            } else {
+                System.out.println();
+                System.out.println("점수가 입력되지 않은 과목입니다.");
+            }
+        }
     }
 }
