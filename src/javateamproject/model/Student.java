@@ -1,9 +1,8 @@
 package javateamproject.model;
 
 import javateamproject.management.SubjectManagement;
-
 import javateamproject.type.ConditionType;
-
+import javateamproject.type.ConditionType;
 
 import java.util.List;
 
