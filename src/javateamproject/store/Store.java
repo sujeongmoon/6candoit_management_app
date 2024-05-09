@@ -175,7 +175,7 @@ public class Store {
         if (result.isPresent()) return result.get();
         return null;
     }
-
+    //과목번호에 해당하는 과목 반환
     public static Subject getSubjectBySubjectId(String subjectId) {
         for (Subject s : subjectStore) {
             if (s.getSubjectId().equals(subjectId)) return s;
@@ -211,36 +211,6 @@ public class Store {
                 .filter(score -> score.getStudentId().equals(studentId))
                 .toList();
     }
-
-
-
-
-    // ㄱㅁ
-
-    // 학생과 과목에 대한 회차 수를 반환하는 메서드
-    // 학생의 번호 & 이름을 인자로 전달받고, 해당 학생이 수강한 과목에서 주어진 과목의 회차 수를 계산하는 메서드
-    public static int getSubjectRoundsByStudentAndSubject(String studentNum, String studentName, String subjectId) {
-        // 주어진 학생 번호에 해당하는 학생을 찾음
-        Optional<Student> optionalStudent = studentStore.stream() //Optional을 사용하여 안전하게 처리
-                .filter(student -> student.getStudentId().equals(studentNum) && student.getStudentName().equals(studentName))
-                .findFirst();
-
-        if (optionalStudent.isPresent()) {
-            Student student = optionalStudent.get();
-            int totalRounds = 0;
-            // 학생이 수강한 과목에서 해당 과목의 회차 수를 계산하기!
-            for (String selectSubjectId : student.getSelectSubjectIds()) {
-                // 학생이 수강한 과목이 주어진 과목과 일치하는 경우에만! 회차 수 더하기.
-                if (selectSubjectId.equals(subjectId)) {
-                    totalRounds += getSubjectRoundsById(subjectId);
-                }
-            }
-            return totalRounds;
-        } else { // 예외 처리
-            throw new IllegalArgumentException("해당 학번과 이름에 해당하는 학생을 찾을 수 없습니다: " + studentNum + ", " + studentName);
-        }
-    }
-
 
     // 해당 학생과 과목에 대한 점수 목록을 반환하는 메서드
     // 주어진 학생 ID와 과목 ID에 해당하는 점수를 찾아서 리스트로 반환
@@ -278,19 +248,4 @@ public class Store {
         }
         return filteredStudents; // 필터링된 수강생 리스트를 return
     }
-
-
-
-    // 수강생의 필수 과목을 반환하는 메서드
-    public List<String> getRequiredSubjects() {
-        List<String> requiredSubjects = new ArrayList<>(); // 필수 과목을 저장할 List
-        for (Subject subject : subjectStore) { // 모든 과목을 반복하면서 필수 과목인지 확인
-            if (subject.getSubjectType() == SubjectType.MUST) { // 과목이 필수 과목인 경우에만 리스트에 추가!
-                requiredSubjects.add(subject.getSubjectId());
-            }
-        }
-        return requiredSubjects; // 필수 과목 List return
-    }
-
-
 }

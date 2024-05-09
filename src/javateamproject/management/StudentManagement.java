@@ -198,7 +198,6 @@ public class StudentManagement {
         System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
 
         System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
-
         boolean flag = true;
         do {
             String conditionChoose = sc.next();
@@ -248,6 +247,7 @@ public class StudentManagement {
                 }
                 default -> System.out.println("상태값을 잘못 입력하셨습니다. 숫자로 다시 입력해주세요. ");
             }
+
         } while (flag);
 
         for (int i = 0; i < Store.getStudentStore().size(); i++) {
@@ -299,22 +299,7 @@ public class StudentManagement {
                 .findFirst();
         return result.isPresent();  //startsWith() 메소드는 문자열이 지정된 문자로 시작하는지 확인
     }
-    //3). 학번에 맞는 학생 인스턴스 리턴
 
-
-    //(3-1). 학번에 해당하는 학생 객체 찾기
-    // 입력된 학번에 해당하는 학생 객체를 찾는 메소드
-    // 'studentStore'에 저장된 학생 객체들을 순회하면서 입력된 학번과 일치하는 학생 객체를 찾아 반환!
-    // 주어진 학번과 일치하는 학생 객체를 studentStore에서 찾아 반환하는 메소드인 findStudentByStudentNum
-
-    public static Student findStudentByStudentNum(String studentNum) {
-        for (Student student : Store.getStudentStore()) {
-            if (student.getStudentId().equals(studentNum)) {
-                return student;
-            }
-        }
-        return null; // 해당 학번에 해당하는 학생이 없을 경우 null 반환
-    }
 
     //(3-2). 찾은 학생 객체 반환
     // 위 과정을 통합하여 학번으로 해당하는 학생 객체를 찾아주는 메소드
@@ -339,23 +324,11 @@ public class StudentManagement {
                 .findFirst();
         return result;
     }
-    public static Student searchGetStudentExistScore() {
-        String studentId;
-        Student student;
-        // 학번 입력 받기
-        do {
-            studentId = getStudentNumFromUser();
-            // 학번 유효성 검사
-            if (!isValidStudentNum(studentId)) {
-                System.out.println("유효하지 않은 학번입니다. 다시 입력하세요.");
-                continue;
-            }
-
-            if (isExistStudent(studentId).isEmpty()) {
-                System.out.println("해당 학번에 해당하는 학생이 없습니다.");
-            } else {
-                return student = isExistStudent(studentId).get();
-            }
-        } while (true);
+    public static boolean isExistCondition(ConditionType conditionType){
+        Optional<Student> result = Store.getStudentStore().stream()
+                .filter(student -> student.getCondition()==conditionType)
+                .findFirst();
+        return result.isPresent();
     }
+
 }
