@@ -339,7 +339,7 @@ public class StudentManagement {
                 .findFirst();
         return result.isPresent();
     }
-    private static Student searchGetStudentAtStudent(){
+    public static Student searchGetStudentAtStudent(){
         while(true){
             String studentId = getStudentNumFromUser();
             Optional<Student> result = Store.getStudentStore().stream()
