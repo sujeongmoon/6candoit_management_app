@@ -39,6 +39,7 @@ public class Score implements Comparable<Score>{
         return  grade;
     }
 
+
     public void setScore(int score,SubjectType subjectType){
         this.score=score;
         this.grade = calculateGrade(score,subjectType);
