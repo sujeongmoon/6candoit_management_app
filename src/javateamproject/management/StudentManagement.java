@@ -157,7 +157,7 @@ public class StudentManagement {
         StudentManagement.inquiryStudent();
         System.out.println("수강생의 개인정보를 조회합니다.");
         try{
-            Student student =searchGetStudent();
+            Student student =searchGetStudentAtStudent();
             System.out.println("========================================================");
             System.out.println("수강생의 개인정보 입니다.");
             System.out.println("이름: " + student.getStudentName());
@@ -176,9 +176,11 @@ public class StudentManagement {
         System.out.println("수강생의 이름을 수정합니다.");
         try{
             StudentManagement.inquiryStudent();  // 학생 목록 보여주기
-            Student student =searchGetStudent();
+
+            Student student =searchGetStudentAtStudent();
             System.out.println("선택하신 수강생의 이름은 " + student.getStudentName() +  "입니다.");
             System.out.println("변경할 이름을 적어주세요.");
+
             String studentName = sc.next();
             System.out.println(studentName+" (으)로 하시겠습니까? 맞으면 y를 입력해주세요.");
             String yesOrNo = sc.next();
@@ -201,7 +203,7 @@ public class StudentManagement {
 
         System.out.println("상태를 관리할 수강생의 학번을 입력해주세요.");
         StudentManagement.inquiryStudent();  // 학생 목록 보여주기
-        Student student = searchGetStudent();
+        Student student = searchGetStudentAtStudent();
         System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
 
         System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
@@ -337,5 +339,16 @@ public class StudentManagement {
                 .findFirst();
         return result.isPresent();
     }
+    private static Student searchGetStudentAtStudent(){
+        while(true){
+            String studentId = getStudentNumFromUser();
+            Optional<Student> result = Store.getStudentStore().stream()
+                    .filter(student -> student.getStudentId().equals(studentId))
+                    .findFirst();
+            if(result.isPresent()) return result.get();
+        }
+
+    }
+
 
 }
