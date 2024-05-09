@@ -80,12 +80,12 @@ public class ScoreManagement {
 
     //점수 수정
     public static void modScore() throws InterruptedException {
-        System.out.println("점수를 수정합니다");
+        System.out.println("이미 등록된 점수를 수정합니다.");
 
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
         Student student;
-        //(1) 해당하는 학번 학생 인스터스 가져오기
+        //(1) 해당하는 학번 학생 인스턴스 가져오기
         student = StudentManagement.searchGetStudent();
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
