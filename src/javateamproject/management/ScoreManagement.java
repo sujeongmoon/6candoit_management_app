@@ -130,6 +130,8 @@ public class ScoreManagement {
         String subjectName = getSubjectNameFromUser(student);
 
         inquirySubjectGrades(student, subjectName);
+        // subjectName을 Subject객체가 아닌 String으로 받아와서, 선택한 과목의 name에 접근 불가
+        System.out.println("\n" + student.getStudentName() + " 수강생이 선택한 과목의 시험 회차 등급 조회가 완료되었습니다.");
 
     }
 
@@ -137,8 +139,9 @@ public class ScoreManagement {
 
     //여기서부터 경민님
     // (1) 수강생의 과목별 평균 등급 조회
-    public static void inquiryStudentAverageBySubject() {
+    public static void inquiryStudentAverageBySubject() throws InterruptedException {
         // 수강생 정보를 가져옴
+        StudentManagement.inquiryStudent();
         Student student = StudentManagement.searchGetStudent();
 
         // 해당 수강생의 점수 목록을 가져오기!
@@ -177,6 +180,8 @@ public class ScoreManagement {
 
             // 평균 등급을 출력
             System.out.println(subjectName + ": " + averageScore);
+
+            System.out.println("\n" + student.getStudentName() + " 수강생의 과목별 평균 등급 출력이 완료되었습니다.\n");
         }
     }
 
