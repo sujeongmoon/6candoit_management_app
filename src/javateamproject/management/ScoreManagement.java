@@ -1,11 +1,18 @@
 package javateamproject.management;
 
+import javateamproject.display.ScoreDisplayView;
 import javateamproject.model.Score;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
+import javateamproject.type.SubjectType;
+import javateamproject.display.ScoreDisplayView;
 
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 
 public class ScoreManagement {
@@ -15,7 +22,7 @@ public class ScoreManagement {
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
-
+        System.out.println("점수를 등록합니다");
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
@@ -25,31 +32,40 @@ public class ScoreManagement {
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
         String subjectName = getSubjectNameFromUser(student);
 
-        //(3) 회차/점수 입력받기
-        int round = getRoundFromUser();
-        int score = getScoreFromUser();
+        int round;
+        int score;
 
-        // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
-        if (!isValidRound(round) || !isValidScore(score)) {
-            System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
-            return; // 잘못된 입력이 있을 경우 메소드 종료
-        }
+        //(4) 회차/점수 입력받기
+        while (true) {
+            round = getRoundFromUser();
+            score = getScoreFromUser();
 
-        // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
-        if (isScoreExist(student, subjectName, round)) {
-            System.out.println("이미 해당 과목의 회차 점수가 등록되어 있습니다.");
-            return; // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+            // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
+//            if (!isValidRound(round) || !isValidScore(score)) {
+//                System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
+//                return; // 잘못된 입력이 있을 경우 메소드 종료
+//            }
+
+            // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
+            if (isScoreExist(student, subjectName, round)) {
+                System.out.println("이미 해당 과목의 회차 점수가 등록되어 있습니다.");
+                System.out.println("");
+                // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+                continue;
+            }
+            break;
         }
         Store.addScore(student.getStudentId(), subjectName, round, score, Store.getSubjectTypeBySubjectId(subjectName));
 
         System.out.println("점수가 성공적으로 등록되었습니다.");
         System.out.println("");
 
-
     }
 
     //점수 수정
     public static void modScore() throws InterruptedException {
+        System.out.println("점수를 수정합니다");
+
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
@@ -62,9 +78,30 @@ public class ScoreManagement {
         //(3) 회차/점수 목록 출력
         inquirySubjectGrades(student, subjectName);
 
+        int round;
+        int score;
+
         //(4) 회차/점수 입력받기
-        int round = getRoundFromUser();
-        int score = getScoreFromUser();
+        while (true) {
+            round = getRoundFromUser();
+            score = getScoreFromUser();
+
+            // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
+//            if (!isValidRound(round) || !isValidScore(score)) {
+//                System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
+//                return; // 잘못된 입력이 있을 경우 메소드 종료
+//            }
+
+            // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
+            if (!isScoreExist(student, subjectName, round)) {
+                System.out.println("해당 과목의 회차 점수가 등록되어 있지 않습니다.");
+                System.out.println("");
+                // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+                continue;
+            }
+            break;
+        }
+
 
         //(5) 해당 회차 점수 수정
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
@@ -77,7 +114,7 @@ public class ScoreManagement {
         if (modifyscore == null) throw new AssertionError();
         modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(modifyscore.getSubjectId()));
 
-
+        ScoreDisplayView.displayView();
     }
 
     //수강생 과복별 시험 회차 등급 조회
@@ -92,6 +129,7 @@ public class ScoreManagement {
         String subjectName = getSubjectNameFromUser(student);
 
         inquirySubjectGrades(student, subjectName);
+
     }
 
 
@@ -204,6 +242,8 @@ public class ScoreManagement {
     // 점수 객체 생성 및 저장
 
 
+
+
 //------- 위 코드에서 사용되는 메소드들 -------
 
 
@@ -264,6 +304,7 @@ public class ScoreManagement {
                 if (score < 0 || score > 100) {
                     throw new IllegalArgumentException("유효하지 않은 점수입니다. 0에서 100 사이의 값을 입력하세요.");
                 }
+
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("잘못된 입력입니다. 숫자를 입력하세요.");
@@ -283,6 +324,7 @@ public class ScoreManagement {
     private static boolean isValidScore(int score) {
         return score >= 0 && score <= 100; // 점수가 0에서 100 사이의 값인지 확인하여 유효성을 반환
     }
+
 
 
     // 해당 과목의 해당 회차 점수가 이미 등록되어 있는지 확인하는 메소드
@@ -387,6 +429,7 @@ public class ScoreManagement {
     // 학생의 점수 수정
 
 
+
 ////    private void updateScore(Student student, String subject, int round, int newScore) {
 ////        //학생의 점수를 수정
 ////        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
@@ -431,8 +474,9 @@ public class ScoreManagement {
 
         //이거 optional 해줘야될거 같은데 이따가 질문
         for (Score score : scores) {
-            System.out.print("[" + score.getRound() + "회차 : " + score.getGrade() + " 등급]  ");
+            System.out.print("[" + score.getRound() + "회차 : " + score.getScore() + " 점 " + score.getGrade() + " 등급]  ");
         }
+        System.out.println("");
         Thread.sleep(500);
     }
 
