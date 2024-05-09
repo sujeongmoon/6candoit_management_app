@@ -36,6 +36,8 @@ public class ScoreManagement {
             round = getRoundFromUser();
             score = getScoreFromUser();
 
+            System.out.println(Store.getSubjectRoundsById(subjectName));
+
             // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
 //            if (!isValidRound(round) || !isValidScore(score)) {
 //                System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
@@ -86,6 +88,7 @@ public class ScoreManagement {
 
         //(4) 회차/점수 입력받기
         while (true) {
+
             round = getRoundFromUser();
             score = getScoreFromUser();
 
@@ -157,7 +160,7 @@ public class ScoreManagement {
 
         inquirySubjectGrades(student, subjectName);
         // subjectName을 Subject객체가 아닌 String으로 받아와서, 선택한 과목의 name에 접근 불가
-        System.out.println("\n" + student.getStudentName() + " 수강생의, 선택한 과목의 시험 회차 등급 조회가 완료되었습니다.");
+        System.out.println("\n" + student.getStudentName() + " 수강생의, " + Store.getSubjectNameBySubjectId(subjectName) + " 시험 회차 등급 조회가 완료되었습니다.");
         Thread.sleep(1000);
     }
 

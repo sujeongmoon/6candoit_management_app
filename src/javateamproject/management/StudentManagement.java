@@ -139,7 +139,7 @@ public class StudentManagement {
         System.out.println("삭제할 학번을 입력하세요:");
         String studentNum = sc.next();
         System.out.print("확인용으로 한 번 더 ");
-        Student student = searchGetStudent();
+        Student student = searchGetStudentAtStudent();
         String confirmNum = student.getStudentId();
         if(confirmNum.equals(studentNum)) {
             Store.deleteStudent(studentNum);
