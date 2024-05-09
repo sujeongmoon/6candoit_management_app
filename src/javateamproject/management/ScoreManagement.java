@@ -135,8 +135,9 @@ public class ScoreManagement {
         return result.isEmpty();
     }
 
-    //수강생 과복별 시험 회차 등급 조회
+    //수강생 과목별 시험 회차 등급 조회
     public static void inqScore() throws InterruptedException {
+        System.out.println("수강생의 과목별 시험 회차 등급을 조회합니다.");
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
