@@ -193,9 +193,11 @@ public class StudentManagement {
         boolean flag = true;
 
         System.out.println("상태를 관리할 수강생의 학번을 입력해주세요.");
+        StudentManagement.inquiryStudent();  // 학생 목록 보여주기
         Student student = searchGetStudent();
-        System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.");
-        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1. GREEN 2. YELLOW 3. RED ");
+        System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
+
+        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
 
         do {
             String conditionChoose = sc.next();
@@ -226,7 +228,7 @@ public class StudentManagement {
         boolean flag = true;
         ConditionType inputCondition = null;
 
-        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.\n1. GREEN 2. YELLOW 3. RED");
+        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
 
         do {
             String conditionChoose = sc.next();
@@ -249,11 +251,12 @@ public class StudentManagement {
 
         for (int i = 0; i < Store.getStudentStore().size(); i++) {
             if (inputCondition == Store.getStudentStore().get(i).getCondition()) {
-                System.out.println(Store.getStudentStore().get(i).getStudentName() + "(" + Store.getStudentStore().get(i).getStudentId() + ")");
+                System.out.printf(Store.getStudentStore().get(i).getStudentName() + "(" + Store.getStudentStore().get(i).getStudentId() + ")   ");
+                if ((i + 1) % 10 == 0) System.out.println();
             }
 
         }
-        System.out.println(inputCondition + " 상태의 수강생이 전부 출력되었습니다.\n");
+        System.out.println("\n\n" + inputCondition + " 상태의 수강생이 전부 출력되었습니다.\n");
         Thread.sleep(1000);
     }
     // 4. 학번으로 해당하는 객체 인스턴스 가져오는 조회 매소드
@@ -317,7 +320,6 @@ public class StudentManagement {
     public static Student searchGetStudent() {
         String studentNum;
         Student student;
-
         // 학번 입력 받기
         do {
             studentNum = getStudentNumFromUser();
