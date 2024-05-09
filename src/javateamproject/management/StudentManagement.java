@@ -134,15 +134,17 @@ public class StudentManagement {
 
     //담당 승완님
     //수강생 제거
-    public static void removeStudent() {
+    public static void removeStudent() throws InterruptedException {
         System.out.println("삭제할 학번을 입력하세요:");
         String studentNum = sc.next();
-        System.out.print("한번 더 ");
-
-        String confirmNum = searchGetStudent().getStudentId();
+        System.out.print("확인용으로 한번 더 ");
+        Student student = searchGetStudent();
+        String confirmNum = student.getStudentId();
         if(confirmNum.equals(studentNum)) {
             Store.deleteStudent(studentNum);
             System.out.println("삭제가완료되었습니다");
+            StudentManagement.inquiryStudent();  // 학생 목록 보여주기
+
         } else{
             System.out.println("학번이 일치하지 않습니다.");
         }
@@ -167,20 +169,19 @@ public class StudentManagement {
     //수강생 이름 수정
     public static void updateStudentName() {
         try{
-
-            System.out.println(searchGetStudent().getStudentName());
+            StudentManagement.inquiryStudent();  // 학생 목록 보여주기
+            Student student =searchGetStudent();
+            System.out.println(student.getStudentName());
             System.out.println("변경 할 이름을 적어주세요.");
             String studentName = sc.next();
             System.out.println(studentName+" 으로 하시겠습니까? 맞으면 y");
             String yesOrNo = sc.next();
             if(yesOrNo.equals("y") || yesOrNo.equals("Y")){
-                searchGetStudent().setStudentName(studentName);
+                student.setStudentName(studentName);
                 System.out.println("수정되었습니다 " + studentName + "님");
             } else{
                 System.out.println("수정페이지로 이동합니다...");
             }
-
-
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -190,7 +191,6 @@ public class StudentManagement {
     //상태수정
     public static void setConditionStudent() throws InterruptedException {
 
-        boolean flag = true;
 
         System.out.println("상태를 관리할 수강생의 학번을 입력해주세요.");
         StudentManagement.inquiryStudent();  // 학생 목록 보여주기
@@ -199,6 +199,7 @@ public class StudentManagement {
 
         System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
 
+        boolean flag = true;
         do {
             String conditionChoose = sc.next();
             switch (conditionChoose) {
@@ -272,7 +273,7 @@ public class StudentManagement {
         String studentNum;
 
         while (true) {
-            System.out.println("학번을 입력하세요 : ");
+            System.out.print("학번을 입력하세요 : ");
             studentNum = sc.next();
 
 
@@ -280,7 +281,7 @@ public class StudentManagement {
             if (isValidStudentNum(studentNum)) {
                 return studentNum;
             } else {
-                System.out.println("유효하지 않은 학번입니다. 다시 입력하세요. ");
+                System.out.println("존재하지 않는 학번입니다.");
             }
         }
     }
@@ -293,7 +294,10 @@ public class StudentManagement {
         //private => 해당 멤버가 같은 클래스 내에서만 접근
         // => isValidStudentId 메소드는 CampManagementApplication 클래스 내부에서만 접근 / 외부에서 호출 x
         // isValidStudentNum => 주어진 학번이 유효한지 검사 => String 형식의 studentNum을 매개변수로 받아서 검사.
-        return studentNum.startsWith("ST");  //startsWith() 메소드는 문자열이 지정된 문자로 시작하는지 확인
+        Optional<Student> result = Store.getStudentStore().stream()
+                .filter(student -> student.getStudentId().equals(studentNum))
+                .findFirst();
+        return result.isPresent();  //startsWith() 메소드는 문자열이 지정된 문자로 시작하는지 확인
     }
     //3). 학번에 맞는 학생 인스턴스 리턴
 
@@ -318,26 +322,40 @@ public class StudentManagement {
     // if 입력된 학번에 해당하는 학생이 없을 경우에는 예외 throw.
 
     public static Student searchGetStudent() {
-        String studentNum;
-        Student student;
+        String studentId;
+        while (true){
 
+            studentId = getStudentNumFromUser();
+            if (!ScoreManagement.isScoreExistByStudentId(studentId)) {
+                System.out.println("점수 정보가 존재 하지 않는 수강생입니다.");
+            }else{
+                return isExistStudent(studentId).get();
+            }
+        }
+    }
+    public static Optional<Student> isExistStudent(String studentId){
+        Optional<Student> result = Store.getStudentStore().stream()
+                .filter(student -> student.getStudentId().equals(studentId))
+                .findFirst();
+        return result;
+    }
+    public static Student searchGetStudentExistScore() {
+        String studentId;
+        Student student;
         // 학번 입력 받기
         do {
-            studentNum = getStudentNumFromUser();
+            studentId = getStudentNumFromUser();
             // 학번 유효성 검사
-            if (!isValidStudentNum(studentNum)) {
+            if (!isValidStudentNum(studentId)) {
                 System.out.println("유효하지 않은 학번입니다. 다시 입력하세요.");
+                continue;
             }
-        } while (!isValidStudentNum(studentNum));
 
-        // 학번에 해당하는 학생 객체 찾기
-        student = findStudentByStudentNum(studentNum);
-        if (student == null) {
-            throw new IllegalArgumentException("해당 학번에 해당하는 학생이 없습니다.");
-        }
-
-        return student;
+            if (isExistStudent(studentId).isEmpty()) {
+                System.out.println("해당 학번에 해당하는 학생이 없습니다.");
+            } else {
+                return student = isExistStudent(studentId).get();
+            }
+        } while (true);
     }
-
-
 }

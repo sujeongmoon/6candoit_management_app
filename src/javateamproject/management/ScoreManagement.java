@@ -1,18 +1,16 @@
 package javateamproject.management;
 
-import javateamproject.display.ScoreDisplayView;
 import javateamproject.model.Score;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
-import javateamproject.type.SubjectType;
 import javateamproject.display.ScoreDisplayView;
+import javateamproject.type.ConditionType;
 
 import java.util.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 
 public class ScoreManagement {
@@ -30,7 +28,7 @@ public class ScoreManagement {
         Student student = StudentManagement.searchGetStudent();
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
-        String subjectName = getSubjectNameFromUser(student);
+        String subjectName = getSubjectIdFromUserAtAdd(student);
 
         int round;
         int score;
@@ -62,21 +60,46 @@ public class ScoreManagement {
 
     }
 
+    private static String getSubjectIdFromUserAtAdd(Student student) {
+        while(true) {
+            List<String> selectedSubjects = student.getSelectSubjectIds();
+
+            SubjectManagement.viewSubjectSelected(selectedSubjects);
+            System.out.print("과목을 입력하세요 : ");
+            String subjectNum = sc.nextLine();
+
+            // 입력된 과목이 유효한지 확인
+            if (selectedSubjects.contains(subjectNum)) {
+                return subjectNum;
+            } else {
+                System.out.println();
+                System.out.println("잘못입력되었습니다.");
+            }
+        }
+    }
+
     //점수 수정
     public static void modScore() throws InterruptedException {
         System.out.println("점수를 수정합니다");
 
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
-
+        Student student;
         //(1) 해당하는 학번 학생 인스터스 가져오기
-        Student student = StudentManagement.searchGetStudent();
+        student = StudentManagement.searchGetStudent();
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
-        String subjectName = getSubjectNameFromUser(student);
+        String subjecId;
+        do{
+             subjecId = getSubjectNameFromUser(student);
+             if(isScoreExistBySubjectId(subjecId, student.getStudentId())){
+                 System.out.println("점수 정보가 존재 하지 않는 과목입니다.");
+             }
+        }while(isScoreExistBySubjectId(subjecId, student.getStudentId()));
+
 
         //(3) 회차/점수 목록 출력
-        inquirySubjectGrades(student, subjectName);
+        inquirySubjectGrades(student, subjecId);
 
         int round;
         int score;
@@ -93,7 +116,7 @@ public class ScoreManagement {
 //            }
 
             // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
-            if (!isScoreExist(student, subjectName, round)) {
+            if (!isScoreExist(student, subjecId, round)) {
                 System.out.println("해당 과목의 회차 점수가 등록되어 있지 않습니다.");
                 System.out.println("");
                 // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
@@ -105,9 +128,9 @@ public class ScoreManagement {
 
 
         //(5) 해당 회차 점수 수정
-        Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
+        Score modifyscore = Store.getScoreBy(student.getStudentId(), subjecId, round);
 
-        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(subjectName));
+        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(subjecId));
 
         System.out.println("점수가 성공적으로 수정 되었습니다.");
         System.out.println("");
@@ -118,16 +141,39 @@ public class ScoreManagement {
         ScoreDisplayView.displayView();
     }
 
+    public static boolean isScoreExistByStudentId(String studentId) {
+        Optional<Score> result = Store.getScoreStore().stream()
+                .filter(score -> score.getStudentId().equals(studentId))
+                .findFirst();
+        return result.isPresent();
+    }
+
+    private static boolean isScoreExistBySubjectId(String subjectId,String studentId) {
+        Optional<Score> result = Store.getScoreStore().stream()
+                .filter(score -> score.getSubjectId().equals(subjectId) && score.getStudentId().equals(studentId))
+                .findFirst();
+        return result.isEmpty();
+    }
+
     //수강생 과복별 시험 회차 등급 조회
     public static void inqScore() throws InterruptedException {
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
         //(1) 해당하는 학번 학생 인스터스 가져오기
-        Student student = StudentManagement.searchGetStudent();
+        Student student;
+        //(1) 해당하는 학번 학생 인스터스 가져오기
+        do {
+            student = StudentManagement.searchGetStudent();
+            if (!isScoreExistByStudentId(student.getStudentId())) {
+                System.out.println("점수 정보가 존재 하지 않는 수강생입니다.");
+            }
+        }while(!isScoreExistByStudentId(student.getStudentId()));
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
         String subjectName = getSubjectNameFromUser(student);
+
+
 
         inquirySubjectGrades(student, subjectName);
         // subjectName을 Subject객체가 아닌 String으로 받아와서, 선택한 과목의 name에 접근 불가
@@ -177,18 +223,38 @@ public class ScoreManagement {
 
             // 과목명을 가져오기!
             String subjectName = Store.getSubjectNameBySubjectId(subjectId);
-
+            String grade = Score.calculateGrade((int)averageScore,Store.getSubjectTypeBySubjectId(subjectId));
             // 평균 등급을 출력
-            System.out.println(subjectName + ": " + averageScore);
 
-            System.out.println("\n" + student.getStudentName() + " 수강생의 과목별 평균 등급 출력이 완료되었습니다.\n");
+            System.out.println(subjectName + ": " + averageScore + "(" + grade + ")");
         }
+        System.out.println(student.getStudentName() + " 수강생의 과목별 평균 등급 출력이 완료되었습니다.\n");
     }
 
     // (2) 특정 상태 수강생들의 필수 과목 평균 등급 조회
     public static void inquiryStudentAverageByStatus() {
         // 특정 상태의 수강생을 필터링하여 가져오기
-        String condition = "";
+        ConditionType condition = null;
+        System.out.println("조회할 수강생의 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
+        boolean flag = true;
+        do {
+            String conditionChoose = sc.next();
+            switch (conditionChoose) {
+                case "1" -> {
+                    condition=ConditionType.GREEN;
+                    flag = false;
+                }
+                case "2" -> {
+                    condition=ConditionType.YELLOW;
+                    flag = false;
+                }
+                case "3" -> {
+                    condition=ConditionType.RED;
+                    flag = false;
+                }
+                default -> System.out.println("상태값을 잘못 입력하셨습니다. 숫자로 다시 입력해주세요. ");
+            }
+        } while (flag);
         List<Student> students = Store.getStudentsByCondition(condition);
 
         // 각 수강생별로 필수 과목별 점수 합산을 저장할 맵을 생성
@@ -235,46 +301,19 @@ public class ScoreManagement {
 
             // 과목명을 가져오기!
             String subjectName = Store.getSubjectNameBySubjectId(subjectId);
-
+            String grade = Score.calculateGrade((int)averageScore,Store.getSubjectTypeBySubjectId(subjectId));
             // 평균 등급을 출력
-            System.out.println(subjectName + ": " + averageScore);
+            System.out.println(subjectName + ": " + grade);
         }
+        System.out.println();
     }
 
 
     // 5. 점수 입력 메소드
-
-
     // 점수 객체 생성 및 저장
-
-
-
-
 //------- 위 코드에서 사용되는 메소드들 -------
-
-
 // 학번으로 해당하는 학생 객체를 찾는 메소드
-
-
     // 과목명을 입력받는 메소드
-    private static String getSubjectNameFromUser(Student student) {
-        Student.inquirySelectSubjectIds(student);
-        String subjectNum;
-        while (true) {
-            System.out.println("과목을 입력하세요 : ");
-            subjectNum = sc.nextLine();
-
-            // 입력된 과목이 유효한지 확인
-            if (isValidStudentSubjects(student, subjectNum)) {
-                return subjectNum;
-            } else {
-                System.out.println();
-                System.out.println("잘못 입력 하셨습니다.");
-            }
-        }
-    }
-
-
     // 회차를 입력받는 메소드
 // 입력값이 유효하지 않을 경우 예외 처리 및 입력값이 유효할때 까지 다시 입력 요청.
     private static int getRoundFromUser() {
@@ -339,33 +378,8 @@ public class ScoreManagement {
         return false;
     }
 
-    // 해당 수강생이 해당 과목을 수강하고 있는지 확인하는 메소드
-    public static boolean isValidStudentSubjects(Student student, String subjectid) {
-        if (student.getSelectSubjectIds().contains(subjectid)) {
-            return true;
-        }
-        return false;
-    }
+    // ------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------
-
-
-// 점수 수정
-// 6. void setScoreAtStudent() {
-
-
-    //    public static void setScoreAtStudent() {
-//        // (1) 해당하는 학번 학생 인스턴스 가져오기
-//        Student student = StudentManagement.searchGetStudent();
-//
-//        // (2) 선택된 학생의 과목 정보와 회차 비교해서 과목 회차 입력받기
-//        Subject subject = getSubjectFromUser(student);
-//        int round = getRoundFromUser(subject);
-//
-//        // (3) 수정할 점수 입력 및 점수 수정
-//        int newScore = getScoreFromUser();
-//        updateScore(student, subject.getSubjectId(), round, newScore);
-//    }
     public static void setScoreAtStudent() {
         // (1) 해당하는 학번 학생 인스턴스 가져오기
         Student student = StudentManagement.searchGetStudent();
@@ -383,29 +397,6 @@ public class ScoreManagement {
 
 // 학생 객체 찾기
 
-
-    // 학생의 과목 정보와 비교하여 과목 선택 받기
-    private static Subject getSubjectFromUser(Student student) {   // getSubjectFromUser(Student student): 학생이 수강 중인 과목 중에서 과목을 선택받습니다.
-        // 학생이 수강 중인 과목 리스트 가져오기
-        List<String> subjects = student.getSelectSubjectIds();
-
-        // 과목 목록 출력
-        System.out.println("수강 중인 과목 목록:");
-        for (String subject : subjects) {
-            System.out.println(Store.getSubjectNameBySubjectId(subject));
-        }
-
-        // 과목 입력 받기
-        Scanner sc = new Scanner(System.in);
-        System.out.print("수정할 점수를 입력할 과목을 선택하세요: ");
-        String subjectName = sc.nextLine();
-
-        // 선택한 과목 찾기
-        if (subjects.contains(subjectName)) return Store.getSubjectBySubjectId(subjectName);
-
-        // 선택한 과목이 없는 경우 예외 처리
-        throw new IllegalArgumentException("수강 중인 과목 중 입력한 이름과 일치하는 과목이 없습니다.");
-    }
 
     // 학생의 점수 리스트 가져오기
     private static List<Score> getScoreListFromStudent(Student student) {
@@ -433,45 +424,6 @@ public class ScoreManagement {
     }
 // 점수 입력 받기
 
-    // 학생의 점수 수정
-
-
-
-////    private void updateScore(Student student, String subject, int round, int newScore) {
-////        //학생의 점수를 수정
-////        // 학생의 점수 리스트 가져오기//지금 구조 바껴서.
-////        //List<Score> scores = student.getScores();
-////        List<Score> scores = Store.getScoreByStudentId(student.getStudentId());//임시
-////
-////        // 해당 과목과 회차에 대한 점수 찾기
-////        for (Score score : scores) {
-////            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
-////                // 해당 점수를 새로운 점수로 업데이트
-////                score.setScore(newScore, SubjectType.MUST);
-////                System.out.println("점수가 성공적으로 수정되었습니다.");
-////                return;
-////            }
-////        }
-//
-
-//        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-//        throw new IllegalArgumentException("해당 과목과 회차에 대한 점수가 없습니다.");
-//    }
-
-//        // 해당 과목과 회차에 대한 점수 찾기
-//        for (Score score : scores) {
-//            if (score.getSubjectId().equals(subject.getSubjectId()) && score.getRound() == round) {
-//                // 해당 점수를 새로운 점수로 업데이트
-//                score.setScore(newScore, SubjectType.MUST);
-//                System.out.println("점수가 성공적으로 수정되었습니다.");
-//                return;
-//            }
-//        }
-
-    // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-
-
-    // ------------------------------------------------------------------------------------------
 //7. void inquiryScoreAtStudent()
     public static void inquirySubjectGrades(Student student, String subjectName) throws InterruptedException {
 
@@ -483,10 +435,60 @@ public class ScoreManagement {
         for (Score score : scores) {
             System.out.print("[" + score.getRound() + "회차 : " + score.getScore() + " 점 " + score.getGrade() + " 등급]  ");
         }
-        System.out.println("");
+        System.out.println();
+        System.out.println();
         Thread.sleep(500);
     }
 
+    // 과목명을 입력받는 메소드
+    public static String getSubjectNameFromUser(Student student) {
+        Student.inquirySelectSubjectIds(student);
+        String subjectNum;
+        while(true) {
+            System.out.print("과목을 입력하세요 : ");
+            subjectNum = sc.nextLine();
+
+            // 입력된 과목이 유효한지 확인
+            if (isScoreExistBySubjectId(student.getStudentId(), subjectNum)) {
+                return subjectNum;
+            } else {
+                System.out.println();
+                System.out.println("점수가 입력되지 않은 과목입니다.");
+            }
+        }
+    }
+
+    // 해당 수강생이 해당 과목을 수강하고 있는지 확인하는 메소드
+    public static boolean isValidStudentSubjects(Student student, String subjectid) {
+        if (student.getSelectSubjectIds().contains(subjectid)) {
+            return true;
+        }
+        return false;
+    }
+
+    // 학생의 과목 정보와 비교하여 과목 선택 받기
+    public static Subject getSubjectFromUser(Student student) {
+        // getSubjectFromUser(Student student): 학생이 수강 중인 과목 중에서 과목을 선택받습니다.
+        // 학생이 수강 중인 과목 리스트 가져오기
+        List<String> subjects = student.getSelectSubjectIds();
+
+        // 과목 목록 출력
+        System.out.println("수강 중인 과목 목록:");
+        for (String subject : subjects) {
+            System.out.println(Store.getSubjectNameBySubjectId(subject));
+        }
+
+        // 과목 입력 받기
+        Scanner sc = new Scanner(System.in);
+        System.out.print("수정할 점수를 입력할 과목을 선택하세요: ");
+        String subjectName = sc.nextLine();
+
+        // 선택한 과목 찾기
+        if (subjects.contains(subjectName)) return Store.getSubjectBySubjectId(subjectName);
+
+        // 선택한 과목이 없는 경우 예외 처리
+        throw new IllegalArgumentException("수강 중인 과목 중 입력한 이름과 일치하는 과목이 없습니다.");
+    }
 
     // 점수 조회
     private void inquiryScoreAtStudent() {
@@ -516,7 +518,6 @@ public class ScoreManagement {
 
 
 }
-
 
 
 

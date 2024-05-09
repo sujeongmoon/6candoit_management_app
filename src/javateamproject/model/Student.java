@@ -1,8 +1,9 @@
 package javateamproject.model;
 
 import javateamproject.management.SubjectManagement;
+import javateamproject.store.Store;
 import javateamproject.type.ConditionType;
-import javateamproject.type.ConditionType;
+import javateamproject.type.SubjectType;
 
 import java.util.List;
 
@@ -36,7 +37,9 @@ public class Student {
         return studentName;
     }
     public List<String> getRequiredSubjects() {   // 필수 과목 목록 getter
-        return requiredSubjects;
+        return this.selectSubjectIds.stream()
+                .filter(s -> Store.getSubjectTypeBySubjectId(s)== SubjectType.MUST)
+                .toList();
     }
     //setter
     public void setStudentName(String studentName) {
