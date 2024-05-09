@@ -185,9 +185,15 @@ public class StudentManagement {
         boolean flag = true;
 
         System.out.println("상태를 관리할 수강생의 학번을 입력해주세요.");
+        StudentManagement.inquiryStudent();  // 학생 목록 보여주기
         Student student = searchGetStudent();
-        System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.");
-        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1. GREEN 2. YELLOW 3. RED ");
+        System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
+
+        for (int i = 0; i < ConditionType.values().length; i++){
+
+        }
+
+        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.");
 
         do {
             String conditionChoose = sc.next();
@@ -218,7 +224,8 @@ public class StudentManagement {
         boolean flag = true;
         ConditionType inputCondition = null;
 
-        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.\n1. GREEN 2. YELLOW 3. RED");
+        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.");
+        //Enum 프린트로 출력하도록
 
         do {
             String conditionChoose = sc.next();
