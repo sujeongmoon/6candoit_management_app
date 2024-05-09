@@ -34,8 +34,4 @@ public class SubjectManagement {
         }
         System.out.println();
     }
-
-
-
-
 }
