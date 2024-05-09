@@ -4,6 +4,7 @@ import javateamproject.model.Score;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.type.ClassType;
+import javateamproject.type.ConditionType;
 import javateamproject.type.SubjectType;
 
 import java.util.ArrayList;
@@ -268,7 +269,7 @@ public class Store {
     }
 
     // 특정 상태의 수강생을 필터링하여 반환하는 메서드
-    public static List<Student> getStudentsByCondition(String condition) {
+    public static List<Student> getStudentsByCondition(ConditionType condition) {
         List<Student> filteredStudents = new ArrayList<>(); // 필터링된 수강생을 저장할 List
         for (Student student : studentStore) { // 모든 수강생을 반복하여 주어진 상태와 일치하는 수강생을 찾아냄
             if (student.getCondition().equals(condition)) { // 수강생의 상태가 주어진 상태와 일치시 리스트에 추가!
