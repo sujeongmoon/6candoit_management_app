@@ -36,7 +36,6 @@ public class ScoreManagement {
             round = getRoundFromUser();
             score = getScoreFromUser();
 
-            System.out.println(Store.getSubjectRoundsById(subjectName));
 
             // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
 //            if (!isValidRound(round) || !isValidScore(score)) {
