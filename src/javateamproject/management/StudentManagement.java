@@ -319,27 +319,32 @@ public class StudentManagement {
     // if 입력된 학번에 해당하는 학생이 없을 경우에는 예외 throw.
 
     public static Student searchGetStudent() {
-        String studentNum;
+        String studentId;
         Student student;
         // 학번 입력 받기
         do {
-            studentNum = getStudentNumFromUser();
+            studentId = getStudentNumFromUser();
             // 학번 유효성 검사
-            if (!isValidStudentNum(studentNum)) {
+            if (!isValidStudentNum(studentId)) {
                 System.out.println("유효하지 않은 학번입니다. 다시 입력하세요.");
+                continue;
             }
-        } while (!isValidStudentNum(studentNum));
 
-        // 학번에 해당하는 학생 객체 찾기
-        do{
-            student = findStudentByStudentNum(studentNum);
-            if (student == null) {
+            if (isExistStudent(studentId).isEmpty()) {
                 System.out.println("해당 학번에 해당하는 학생이 없습니다.");
             }
-        }while(student != null);
+            else {
+                return student=isExistStudent(studentId).get();
+            }
+        } while (true);
+        // 학번에 해당하는 학생 객체 찾기
 
-        return student;
     }
-
+    public static Optional<Student> isExistStudent(String studentId){
+        Optional<Student> result = Store.getStudentStore().stream()
+                .filter(student -> student.getStudentId().equals(studentId))
+                .findFirst();
+        return result;
+    }
 
 }
