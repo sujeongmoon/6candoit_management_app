@@ -23,7 +23,7 @@ public class ScoreManagement {
         StudentManagement.inquiryStudent();
 
         //(1) 해당하는 학번 학생 인스턴스 가져오기
-        Student student = StudentManagement.searchGetStudent();
+        Student student = StudentManagement.searchGetStudentAtStudent();
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
         String subjectName = SubjectManagement.getSubjectIdFromUserAtAdd(student);
