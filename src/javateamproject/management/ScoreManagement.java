@@ -4,12 +4,11 @@ import javateamproject.model.Score;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
-import javateamproject.type.SubjectType;
 import javateamproject.display.ScoreDisplayView;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 
 public class ScoreManagement {
@@ -65,22 +64,28 @@ public class ScoreManagement {
 
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
-
+        Student student;
         //(1) 해당하는 학번 학생 인스터스 가져오기
-        Student student = StudentManagement.searchGetStudent();
+        do {
+            student = StudentManagement.searchGetStudent();
+            if (!isScoreExistByStudentId(student.getStudentId())) {
+                System.out.println("점수 정보가 존재 하지 않는 수강생입니다.");
+            }
+        }while(!isScoreExistByStudentId(student.getStudentId()));
+
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
-        String subjectName;
+        String subjecId;
         do{
-             subjectName= getSubjectNameFromUser(student);
-             if(!isScoreExistBySubjectName(subjectName)){
+             subjecId = getSubjectNameFromUser(student);
+             if(isScoreExistBySubjectId(subjecId, student.getStudentId())){
                  System.out.println("점수 정보가 존재 하지 않는 과목입니다.");
              }
-        }while(isScoreExistBySubjectName(subjectName));
+        }while(isScoreExistBySubjectId(subjecId, student.getStudentId()));
 
 
         //(3) 회차/점수 목록 출력
-        inquirySubjectGrades(student, subjectName);
+        inquirySubjectGrades(student, subjecId);
 
         int round;
         int score;
@@ -97,7 +102,7 @@ public class ScoreManagement {
 //            }
 
             // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
-            if (!isScoreExist(student, subjectName, round)) {
+            if (!isScoreExist(student, subjecId, round)) {
                 System.out.println("해당 과목의 회차 점수가 등록되어 있지 않습니다.");
                 System.out.println("");
                 // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
@@ -109,9 +114,9 @@ public class ScoreManagement {
 
 
         //(5) 해당 회차 점수 수정
-        Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
+        Score modifyscore = Store.getScoreBy(student.getStudentId(), subjecId, round);
 
-        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(subjectName));
+        modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(subjecId));
 
         System.out.println("점수가 성공적으로 수정 되었습니다.");
         System.out.println("");
@@ -122,9 +127,18 @@ public class ScoreManagement {
         ScoreDisplayView.displayView();
     }
 
-    private static boolean isScoreExistBySubjectName(String subjectName) {
+    private static boolean isScoreExistByStudentId(String studentId) {
         Optional<Score> result = Store.getScoreStore().stream()
-                .filter(score -> score.getSubjectId().equals(subjectName))
+                .filter(score -> score.getStudentId().equals(studentId))
+                .findFirst();
+        return result.isPresent();
+    }
+
+    private static boolean isScoreExistBySubjectId(String subjectId,String studentId) {
+        Optional<Score> result = Store.getScoreStore().stream()
+                .filter(score -> score.getSubjectId().equals(subjectId) && score.getStudentId().equals(studentId))
+                .findFirst();
+        return result.isEmpty();
     }
 
     //수강생 과복별 시험 회차 등급 조회
