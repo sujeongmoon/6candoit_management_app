@@ -134,15 +134,17 @@ public class StudentManagement {
 
     //담당 승완님
     //수강생 제거
-    public static void removeStudent() {
+    public static void removeStudent() throws InterruptedException {
         System.out.println("삭제할 학번을 입력하세요:");
         String studentNum = sc.next();
-        System.out.print("한번 더 ");
-
-        String confirmNum = searchGetStudent().getStudentId();
+        System.out.print("확인용으로 한번 더 ");
+        Student student = searchGetStudent();
+        String confirmNum = student.getStudentId();
         if(confirmNum.equals(studentNum)) {
             Store.deleteStudent(studentNum);
             System.out.println("삭제가완료되었습니다");
+            StudentManagement.inquiryStudent();  // 학생 목록 보여주기
+
         } else{
             System.out.println("학번이 일치하지 않습니다.");
         }
@@ -167,20 +169,19 @@ public class StudentManagement {
     //수강생 이름 수정
     public static void updateStudentName() {
         try{
-
-            System.out.println(searchGetStudent().getStudentName());
+            StudentManagement.inquiryStudent();  // 학생 목록 보여주기
+            Student student =searchGetStudent();
+            System.out.println(student.getStudentName());
             System.out.println("변경 할 이름을 적어주세요.");
             String studentName = sc.next();
             System.out.println(studentName+" 으로 하시겠습니까? 맞으면 y");
             String yesOrNo = sc.next();
             if(yesOrNo.equals("y") || yesOrNo.equals("Y")){
-                searchGetStudent().setStudentName(studentName);
+                student.setStudentName(studentName);
                 System.out.println("수정되었습니다 " + studentName + "님");
             } else{
                 System.out.println("수정페이지로 이동합니다...");
             }
-
-
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
