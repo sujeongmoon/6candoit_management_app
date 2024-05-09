@@ -107,6 +107,7 @@ public class ScoreManagement {
         }
 
 
+
         //(5) 해당 회차 점수 수정
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
 
@@ -357,6 +358,7 @@ public class ScoreManagement {
         // (3) 수정할 점수 입력 및 점수 수정
         int newScore = getScoreFromUser();
         //updateScore(student, subject.getSubjectId(), round, newScore);
+
     }
 
 
