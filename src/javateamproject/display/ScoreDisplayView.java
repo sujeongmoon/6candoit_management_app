@@ -2,8 +2,6 @@ package javateamproject.display;
 
 import javateamproject.management.ScoreManagement;
 
-import java.util.Scanner;
-
 public class ScoreDisplayView extends DisplayView {
     public static void displayView() throws InterruptedException {
         boolean flag = true;

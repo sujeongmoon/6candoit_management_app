@@ -2,7 +2,6 @@ package javateamproject.display;
 
 import javateamproject.management.StudentManagement;
 
-import java.util.Scanner;
 
 public class StudentDisplayView extends DisplayView{
     public static void displayView() throws InterruptedException {
@@ -20,7 +19,7 @@ public class StudentDisplayView extends DisplayView{
                     flag = false;
                 }
                 default -> {
-                    System.out.println("1~5까지의 정숫를 입력해주세요\n");
+                    System.out.println("1~5까지의 정수를 입력해주세요.\n");
                 }
             }
         } while (flag);
@@ -37,7 +36,7 @@ public class StudentDisplayView extends DisplayView{
                 case "3" -> StudentManagement.inquiryConditionStudent();
                 case "4" -> flag = false;
                 default -> {
-                    System.out.println("1~4까지의 정숫를 입력해주세요\n");
+                    System.out.println("1~4까지의 정수를 입력해주세요\n");
                 }
             }
         } while (flag);
@@ -55,7 +54,7 @@ public class StudentDisplayView extends DisplayView{
                     flag = false;
                 }
                 default -> {
-                    System.out.println("1~3까지의 정숫를 입력해주세요\n");
+                    System.out.println("1~3까지의 정수를 입력해주세요\n");
                 }
             }
         } while (flag);

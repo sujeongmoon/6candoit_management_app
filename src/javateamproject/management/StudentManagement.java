@@ -27,17 +27,17 @@ public class StudentManagement {
         String subjectId;
         while (true) {
             SubjectManagement.viewSubjects(SubjectType.MUST);
-            System.out.print("\n해당하는 필수과목코드를 입력해주세요");
+            System.out.print("\n해당하는 필수과목 코드를 입력해주세요.");
             try {
                 subjectId = sc.next();
                 if (subjectIds.contains(subjectId)) {
                     System.out.println("이미 선택한 과목입니다.");
-                    System.out.println("다시 입력하세요");
+                    System.out.println("다시 입력하세요.");
                     continue;
                 }
                 if (!mustSubjects.contains(subjectId)) {
                     System.out.println("잘못 입력하셨습니다.");
-                    System.out.println("목록에 맞는 과목코드를 입력하세요!");
+                    System.out.println("목록에 맞는 과목 코드를 입력하세요!");
                     continue;
                 }
                 count++;
@@ -50,12 +50,12 @@ public class StudentManagement {
             System.out.print("\n선택한 과목 목록 입니다.");
             SubjectManagement.viewSubjectSelected(subjectIds);
             if (count >= 5) {
-                System.out.println("\n 모든 과목을 입력하셨습니다.");
+                System.out.println("\n모든 과목을 입력하셨습니다.");
                 break;
             }
             if (count >= 3) {
-                System.out.println("\n 필수 과목 3개 이상을 입력하셨습니다.");
-                System.out.println("더 많은 필수 과목을 듣고 싶으시면 'y'를 입력하세요");
+                System.out.println("\n필수과목 3개 이상을 입력하셨습니다.");
+                System.out.println("더 많은 필수과목을 듣고 싶으시면 'y'를 입력하세요.");
                 String sw = sc.next();
                 if (!sw.equalsIgnoreCase("Y")) {
                     break;
@@ -69,17 +69,17 @@ public class StudentManagement {
         List<String> choiceSubjects = Store.getSubjectNamesBySubjectType(SubjectType.CHOICE);
         while (true) {
             SubjectManagement.viewSubjects(SubjectType.CHOICE);
-            System.out.print("\n해당하는 선택과목코드를 입력해주세요");
+            System.out.print("\n해당하는 선택과목 코드를 입력해주세요.");
             try {
                 subjectId = sc.next();
                 if (subjectIds.contains(subjectId)) {
                     System.out.println("이미 선택한 과목입니다.");
-                    System.out.println("다시 입력하세요");
+                    System.out.println("다시 입력하세요.");
                     continue;
                 }
                 if (!choiceSubjects.contains(subjectId)) {
                     System.out.println("잘못 입력하셨습니다.");
-                    System.out.println("목록에 맞는 과목코드를 입력하세요!");
+                    System.out.println("목록에 맞는 과목 코드를 입력하세요!");
                     continue;
                 }
                 count++;
@@ -96,8 +96,8 @@ public class StudentManagement {
                 break;
             }
             if (count >= 2) {
-                System.out.println("\n 선택 과목을 2개 이상을 입력하셨습니다.");
-                System.out.println("더 많은 선택 과목을 듣고 싶으시면 'y'를 입력하세요");
+                System.out.println("\n선택과목을 2개 이상을 입력하셨습니다.");
+                System.out.println("더 많은 선택과목을 듣고 싶으시면 'y'를 입력하세요.");
                 String sw = sc.next();
                 if (!sw.equalsIgnoreCase("Y")) {
                     break;
@@ -135,32 +135,37 @@ public class StudentManagement {
     //담당 승완님
     //수강생 제거
     public static void removeStudent() throws InterruptedException {
+        StudentManagement.inquiryStudent();
         System.out.println("삭제할 학번을 입력하세요:");
         String studentNum = sc.next();
-        System.out.print("확인용으로 한번 더 ");
+        System.out.print("확인용으로 한 번 더 ");
         Student student = searchGetStudent();
         String confirmNum = student.getStudentId();
         if(confirmNum.equals(studentNum)) {
             Store.deleteStudent(studentNum);
-            System.out.println("삭제가완료되었습니다");
+            System.out.println("삭제가 완료되었습니다.");
             StudentManagement.inquiryStudent();  // 학생 목록 보여주기
 
         } else{
             System.out.println("학번이 일치하지 않습니다.");
         }
+        Thread.sleep(1000);
     }
 
     //수강생 개인 정보 조회
-    public static void searchStudent() {
+    public static void searchStudent() throws InterruptedException {
+        StudentManagement.inquiryStudent();
+        System.out.println("수강생의 개인정보를 조회합니다.");
         try{
             Student student =searchGetStudent();
             System.out.println("========================================================");
-            System.out.println("학생의 개인정보 입니다.");
+            System.out.println("수강생의 개인정보 입니다.");
             System.out.println("이름: " + student.getStudentName());
             System.out.println("학번: " + student.getStudentId());
             System.out.println("과목: " +student.getSelectSubjectIds());
             System.out.println("컨디션: "+student.getCondition());
             System.out.println("=======================================================");
+            Thread.sleep(1000);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -168,20 +173,22 @@ public class StudentManagement {
 
     //수강생 이름 수정
     public static void updateStudentName() {
+        System.out.println("수강생의 이름을 수정합니다.");
         try{
             StudentManagement.inquiryStudent();  // 학생 목록 보여주기
             Student student =searchGetStudent();
-            System.out.println(student.getStudentName());
-            System.out.println("변경 할 이름을 적어주세요.");
+            System.out.println("선택하신 수강생의 이름은 " + student.getStudentName() +  "입니다.");
+            System.out.println("변경할 이름을 적어주세요.");
             String studentName = sc.next();
-            System.out.println(studentName+" 으로 하시겠습니까? 맞으면 y");
+            System.out.println(studentName+" (으)로 하시겠습니까? 맞으면 y를 입력해주세요.");
             String yesOrNo = sc.next();
             if(yesOrNo.equals("y") || yesOrNo.equals("Y")){
                 student.setStudentName(studentName);
-                System.out.println("수정되었습니다 " + studentName + "님");
+                System.out.println("수정되었습니다, " + studentName + " 님.");
             } else{
-                System.out.println("수정페이지로 이동합니다...");
+                System.out.println("y가 입력되지 않았습니다. 수정페이지로 이동합니다...");
             }
+            Thread.sleep(1000);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
