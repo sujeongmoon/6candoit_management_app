@@ -330,10 +330,12 @@ public class StudentManagement {
         } while (!isValidStudentNum(studentNum));
 
         // 학번에 해당하는 학생 객체 찾기
-        student = findStudentByStudentNum(studentNum);
-        if (student == null) {
-            throw new IllegalArgumentException("해당 학번에 해당하는 학생이 없습니다.");
-        }
+        do{
+            student = findStudentByStudentNum(studentNum);
+            if (student == null) {
+                System.out.println("해당 학번에 해당하는 학생이 없습니다.");
+            }
+        }while(student != null);
 
         return student;
     }
