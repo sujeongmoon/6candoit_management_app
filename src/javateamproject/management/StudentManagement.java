@@ -221,7 +221,6 @@ public class StudentManagement {
         ConditionType inputCondition = null;
 
         System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
-        //Enum 프린트로 출력하도록
 
         do {
             String conditionChoose = sc.next();
