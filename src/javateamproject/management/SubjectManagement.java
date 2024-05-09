@@ -5,8 +5,10 @@ import javateamproject.store.Store;
 import javateamproject.type.SubjectType;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class SubjectManagement {
+    private static Scanner sc = new Scanner(System.in);
     //필수, 선택 과목별 목록 보여주기
     public static void viewSubjects(SubjectType subjectType) {
         List<Subject> subjects = Store.getSubjectStore();
@@ -34,8 +36,6 @@ public class SubjectManagement {
         }
         System.out.println();
     }
-
-
 
 
 }
