@@ -320,7 +320,6 @@ public class StudentManagement {
     public static Student searchGetStudent() {
         String studentNum;
         Student student;
-
         // 학번 입력 받기
         do {
             studentNum = getStudentNumFromUser();

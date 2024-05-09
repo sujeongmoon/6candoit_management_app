@@ -9,7 +9,7 @@ public class ScoreDisplayView extends DisplayView {
         boolean flag = true;
 
         do {
-            System.out.println("1. 점수 등록\n2.점수 수정\n3. 점수 조회\n4. 메인 화면 이동");
+            System.out.println("1. 점수 등록\n2. 점수 수정\n3. 점수 조회\n4. 메인 화면 이동");
             String choose = sc.next();
             switch (choose) {
                 case "1":
