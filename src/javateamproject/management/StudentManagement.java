@@ -189,11 +189,7 @@ public class StudentManagement {
         Student student = searchGetStudent();
         System.out.println("현재 " + student.getStudentName() + "님의 상태는 " + student.getCondition() + "입니다.\n");
 
-//        for (int i = 0; i < ConditionType.values().length; i++){
-//
-//        }
-
-        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.");
+        System.out.println(student.getStudentName() + "수강생의 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
 
         do {
             String conditionChoose = sc.next();
@@ -224,7 +220,7 @@ public class StudentManagement {
         boolean flag = true;
         ConditionType inputCondition = null;
 
-        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.");
+        System.out.println("상태별 수강생을 조회합니다. 상태를 숫자로 입력해주세요.\n1.GREEN 2.YELLOW 3.RED");
         //Enum 프린트로 출력하도록
 
         do {
@@ -248,11 +244,12 @@ public class StudentManagement {
 
         for (int i = 0; i < Store.getStudentStore().size(); i++) {
             if (inputCondition == Store.getStudentStore().get(i).getCondition()) {
-                System.out.println(Store.getStudentStore().get(i).getStudentName() + "(" + Store.getStudentStore().get(i).getStudentId() + ")");
+                System.out.printf(Store.getStudentStore().get(i).getStudentName() + "(" + Store.getStudentStore().get(i).getStudentId() + ")   ");
+                if ((i + 1) % 10 == 0) System.out.println();
             }
 
         }
-        System.out.println(inputCondition + " 상태의 수강생이 전부 출력되었습니다.\n");
+        System.out.println("\n\n" + inputCondition + " 상태의 수강생이 전부 출력되었습니다.\n");
         Thread.sleep(1000);
     }
     // 4. 학번으로 해당하는 객체 인스턴스 가져오는 조회 매소드
