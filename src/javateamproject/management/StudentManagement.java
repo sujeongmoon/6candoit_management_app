@@ -151,7 +151,14 @@ public class StudentManagement {
     //수강생 개인 정보 조회
     public static void searchStudent() {
         try{
-            System.out.println("수강생의 이름은" + searchGetStudent().getStudentName() + "입니다" );
+            Student student =searchGetStudent();
+            System.out.println("========================================================");
+            System.out.println("학생의 개인정보 입니다.");
+            System.out.println("이름: " + student.getStudentName());
+            System.out.println("학번: " + student.getStudentId());
+            System.out.println("과목: " +student.getSelectSubjectIds());
+            System.out.println("컨디션: "+student.getCondition());
+            System.out.println("=======================================================");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -160,6 +167,7 @@ public class StudentManagement {
     //수강생 이름 수정
     public static void updateStudentName() {
         try{
+
             System.out.println(searchGetStudent().getStudentName());
             System.out.println("변경 할 이름을 적어주세요.");
             String studentName = sc.next();

@@ -1,10 +1,7 @@
 package javateamproject.model;
 
-<<<<<<< HEAD
 import javateamproject.management.SubjectManagement;
-=======
 import javateamproject.type.ConditionType;
->>>>>>> 6be57d2f962b7c1b3387796cba3eaf15ba565280
 
 import java.util.List;
 
