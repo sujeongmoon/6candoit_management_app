@@ -36,6 +36,7 @@ public class Student {
     public String getStudentName() {
         return studentName;
     }
+    // 수강생의 필수 과목을 반환하는 메서드
     public List<String> getRequiredSubjects() {   // 필수 과목 목록 getter
         return this.selectSubjectIds.stream()
                 .filter(s -> Store.getSubjectTypeBySubjectId(s)== SubjectType.MUST)
@@ -47,9 +48,6 @@ public class Student {
     }
     public void setCondition(ConditionType condition) {
         this.condition = condition;
-    }
-    public void setRequiredSubjects(List<String> requiredSubjects) { // 필수 과목 목록 setter
-        this.requiredSubjects = requiredSubjects;
     }
 
     // 수강과목 리스트 띄우기
