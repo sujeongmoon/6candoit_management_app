@@ -14,10 +14,13 @@ public class ScoreDisplayView extends DisplayView {
             switch (choose) {
                 case "1":
                     ScoreManagement.addScore();
+                    break;
                 case "2":
                     ScoreManagement.modScore();
+                    break;
                 case "3":
                     displayInquiryScore();
+                    break;
                 case "4":
                     flag = false;
                     break;
@@ -46,3 +49,4 @@ public class ScoreDisplayView extends DisplayView {
     }
 
 }
+

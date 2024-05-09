@@ -4,19 +4,22 @@ import javateamproject.model.Score;
 import javateamproject.model.Student;
 import javateamproject.model.Subject;
 import javateamproject.store.Store;
-
+import javateamproject.type.SubjectType;
+import javateamproject.display.ScoreDisplayView;
+import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 
 
 public class ScoreManagement {
 
     private static Scanner sc = new Scanner(System.in);
+
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
-
+        System.out.println("점수를 등록합니다");
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
@@ -26,31 +29,40 @@ public class ScoreManagement {
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
         String subjectName = getSubjectNameFromUser(student);
 
-        //(3) 회차/점수 입력받기
-        int round = getRoundFromUser();
-        int score = getScoreFromUser();
+        int round;
+        int score;
 
-        // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
-        if (!isValidRound(round) || !isValidScore(score)) {
-            System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
-            return; // 잘못된 입력이 있을 경우 메소드 종료
-        }
+        //(4) 회차/점수 입력받기
+        while (true) {
+            round = getRoundFromUser();
+            score = getScoreFromUser();
 
-        // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
-        if (isScoreExist(student, subjectName, round)) {
-            System.out.println("이미 해당 과목의 회차 점수가 등록되어 있습니다.");
-            return; // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+            // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
+//            if (!isValidRound(round) || !isValidScore(score)) {
+//                System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
+//                return; // 잘못된 입력이 있을 경우 메소드 종료
+//            }
+
+            // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
+            if (isScoreExist(student, subjectName, round)) {
+                System.out.println("이미 해당 과목의 회차 점수가 등록되어 있습니다.");
+                System.out.println("");
+                // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+                continue;
+            }
+            break;
         }
-        Store.addScore(student.getStudentId(),subjectName,round,score,Store.getSubjectTypeBySubjectId(subjectName));
+        Store.addScore(student.getStudentId(), subjectName, round, score, Store.getSubjectTypeBySubjectId(subjectName));
 
         System.out.println("점수가 성공적으로 등록되었습니다.");
         System.out.println("");
-
 
     }
 
     //점수 수정
     public static void modScore() throws InterruptedException {
+        System.out.println("점수를 수정합니다");
+
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
@@ -62,7 +74,7 @@ public class ScoreManagement {
         do{
              subjectName= getSubjectNameFromUser(student);
              if(!isScoreExistBySubjectName(subjectName)){
-                 System.out.println("점수 정보가 존재 하지 않는 ");
+                 System.out.println("점수 정보가 존재 하지 않는 과목입니다.");
              }
         }while(isScoreExistBySubjectName(subjectName));
 
@@ -70,9 +82,30 @@ public class ScoreManagement {
         //(3) 회차/점수 목록 출력
         inquirySubjectGrades(student, subjectName);
 
+        int round;
+        int score;
+
         //(4) 회차/점수 입력받기
-        int round = getRoundFromUser();
-        int score = getScoreFromUser();
+        while (true) {
+            round = getRoundFromUser();
+            score = getScoreFromUser();
+
+            // 주의사항: 회차 (1~10), 점수(0~100) 조건에 맞춰서 입력된 값인지 확인
+//            if (!isValidRound(round) || !isValidScore(score)) {
+//                System.out.println("잘못된 입력입니다. 회차는 1에서 10 사이, 점수는 0에서 100 사이의 값을 입력하세요.");
+//                return; // 잘못된 입력이 있을 경우 메소드 종료
+//            }
+
+            // (4) 과목정보와 회차가 동일한 경우 (다시 받을지/예외처리 할지)
+            if (!isScoreExist(student, subjectName, round)) {
+                System.out.println("해당 과목의 회차 점수가 등록되어 있지 않습니다.");
+                System.out.println("");
+                // 이미 해당 과목의 회차 점수가 등록되어 있는 경우 메소드 종료
+                continue;
+            }
+            break;
+        }
+
 
         //(5) 해당 회차 점수 수정
         Score modifyscore = Store.getScoreBy(student.getStudentId(), subjectName, round);
@@ -85,11 +118,12 @@ public class ScoreManagement {
         if (modifyscore == null) throw new AssertionError();
         modifyscore.setScore(score, Store.getSubjectTypeBySubjectId(modifyscore.getSubjectId()));
 
-
+        ScoreDisplayView.displayView();
     }
 
     private static boolean isScoreExistBySubjectName(String subjectName) {
-
+        Optional<Score> result = Store.getScoreStore().stream()
+                .filter(score -> score.getSubjectId().equals(subjectName))
     }
 
     //수강생 과복별 시험 회차 등급 조회
@@ -104,16 +138,112 @@ public class ScoreManagement {
         String subjectName = getSubjectNameFromUser(student);
 
         inquirySubjectGrades(student, subjectName);
+
     }
+
+
 
     //여기서부터 경민님
-    //수강생의 과목별 평균 등급을 조회
+    // (1) 수강생의 과목별 평균 등급 조회
     public static void inquiryStudentAverageBySubject() {
+        // 수강생 정보를 가져옴
+        Student student = StudentManagement.searchGetStudent();
+
+        // 해당 수강생의 점수 목록을 가져오기!
+        List<Score> scores = Store.getScoreByStudentId(student.getStudentId());
+
+        // 각 과목별로 점수를 합산하기 위한 맵을 생성
+        Map<String, Integer> subjectScores = new HashMap<>();
+        // 각 과목별로 회차를 저장하기 위한 맵을 생성
+        Map<String, Integer> subjectRounds = new HashMap<>();
+
+        // 각 과목별로 점수를 합산 및 회차를 카운트
+        for (Score score : scores) {
+            String subjectId = score.getSubjectId();
+            int scoreValue = score.getScore();
+
+            // 해당 과목의 회차 수를 가져와서 증가시킴
+            subjectRounds.put(subjectId, subjectRounds.getOrDefault(subjectId, 0) + 1);
+
+            // 해당 과목의 점수를 합산
+            subjectScores.put(subjectId, subjectScores.getOrDefault(subjectId, 0) + scoreValue);
+        }
+
+        // 과목별 평균 등급을 출력
+        System.out.println("수강생 " + student.getStudentName() + "의 과목별 평균 등급:");
+        for (String subjectId : subjectScores.keySet()) {
+            // 해당 과목의 총 회차 수를 가져오기!
+            int totalRounds = subjectRounds.get(subjectId);
+            // 해당 과목의 총 점수를 가져오기!
+            int totalScore = subjectScores.get(subjectId);
+
+            // 평균 점수를 계산
+            double averageScore = (double) totalScore / totalRounds;
+
+            // 과목명을 가져오기!
+            String subjectName = Store.getSubjectNameBySubjectId(subjectId);
+
+            // 평균 등급을 출력
+            System.out.println(subjectName + ": " + averageScore);
+        }
     }
 
-    //수강생 상태별 평균 등급을 조회
+    // (2) 특정 상태 수강생들의 필수 과목 평균 등급 조회
     public static void inquiryStudentAverageByStatus() {
+        // 특정 상태의 수강생을 필터링하여 가져오기
+        String condition = "";
+        List<Student> students = Store.getStudentsByCondition(condition);
+
+        // 각 수강생별로 필수 과목별 점수 합산을 저장할 맵을 생성
+        Map<String, Integer> totalScores = new HashMap<>();
+        // 각 수강생별로 필수 과목별 회차 합산을 저장할 맵을 생성
+        Map<String, Integer> totalRounds = new HashMap<>();
+
+        // 각 수강생에 대해 반복
+        for (Student student : students) {
+            // 해당 수강생의 필수 과목 정보를 가져오기
+            List<String> requiredSubjects = student.getRequiredSubjects();
+
+            // 각 과목별로 점수를 합산 및 회차를 카운트
+            for (String subjectId : requiredSubjects) {
+                // 해당 수강생의 해당 과목에 대한 점수를 가져오기
+                List<Score> scores = Store.getScoresByStudentAndSubject(student.getStudentId(), subjectId);
+
+                // 해당 과목의 총 회차 수를 가져오기!
+                int subjectRounds = Store.getSubjectRoundsById(subjectId);
+
+                // 해당 과목의 총 점수를 합산
+                int subjectTotalScore = 0;
+                for (Score score : scores) {
+                    subjectTotalScore += score.getScore();
+                }
+
+                // 해당 과목의 점수를 누적하여 맵에 저장
+                totalScores.put(subjectId, totalScores.getOrDefault(subjectId, 0) + subjectTotalScore);
+                // 해당 과목의 회차를 누적하여 맵에 저장
+                totalRounds.put(subjectId, totalRounds.getOrDefault(subjectId, 0) + subjectRounds);
+            }
+        }
+
+        // 각 수강생의 필수 과목별 평균 등급을 출력
+        System.out.println("특정 상태 수강생들의 필수 과목 평균 등급:");
+        for (String subjectId : totalScores.keySet()) {
+            // 해당 과목의 총 회차 수를 가져오기!
+            int subjectTotalRounds = totalRounds.get(subjectId);
+            // 해당 과목의 총 점수를 가져오기!
+            int subjectTotalScore = totalScores.get(subjectId);
+
+            // 평균 점수를 계산
+            double averageScore = (double) subjectTotalScore / subjectTotalRounds;
+
+            // 과목명을 가져오기!
+            String subjectName = Store.getSubjectNameBySubjectId(subjectId);
+
+            // 평균 등급을 출력
+            System.out.println(subjectName + ": " + averageScore);
+        }
     }
+
 
     // 5. 점수 입력 메소드
 
@@ -127,6 +257,10 @@ public class ScoreManagement {
 
 
 // 학번으로 해당하는 학생 객체를 찾는 메소드
+
+
+
+    // 과목명을 입력받는 메소드
 
 
     // 회차를 입력받는 메소드
@@ -164,6 +298,7 @@ public class ScoreManagement {
                 if (score < 0 || score > 100) {
                     throw new IllegalArgumentException("유효하지 않은 점수입니다. 0에서 100 사이의 값을 입력하세요.");
                 }
+
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("잘못된 입력입니다. 숫자를 입력하세요.");
@@ -199,7 +334,7 @@ public class ScoreManagement {
 // 6. void setScoreAtStudent() {
 
 
-//    public static void setScoreAtStudent() {
+    //    public static void setScoreAtStudent() {
 //        // (1) 해당하는 학번 학생 인스턴스 가져오기
 //        Student student = StudentManagement.searchGetStudent();
 //
@@ -211,7 +346,7 @@ public class ScoreManagement {
 //        int newScore = getScoreFromUser();
 //        updateScore(student, subject.getSubjectId(), round, newScore);
 //    }
- public static void setScoreAtStudent() {
+    public static void setScoreAtStudent() {
         // (1) 해당하는 학번 학생 인스턴스 가져오기
         Student student = StudentManagement.searchGetStudent();
 
@@ -289,23 +424,23 @@ public class ScoreManagement {
 //            }
 //        }
 
-        // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
-
+    // 해당 과목과 회차에 대한 점수가 없는 경우 예외 처리
 
 
     // ------------------------------------------------------------------------------------------
 //7. void inquiryScoreAtStudent()
-   public static void inquirySubjectGrades(Student student, String subjectName) throws InterruptedException {
+    public static void inquirySubjectGrades(Student student, String subjectName) throws InterruptedException {
 
         List<Score> scores = Store.getScoreStore().stream()
-                .filter(a -> a.getSubjectId().equals(subjectName)  && a.getStudentId().equals(student.getStudentId()))
+                .filter(a -> a.getSubjectId().equals(subjectName) && a.getStudentId().equals(student.getStudentId()))
                 .toList();
 
-                 //이거 optional 해줘야될거 같은데 이따가 질문
-        for (Score score : scores){
-            System.out.print("["+score.getRound() + "회차 : " + score.getGrade() + " 등급]  ");
+        //이거 optional 해줘야될거 같은데 이따가 질문
+        for (Score score : scores) {
+            System.out.print("[" + score.getRound() + "회차 : " + score.getScore() + " 점 " + score.getGrade() + " 등급]  ");
         }
-    Thread.sleep(500);
+        System.out.println("");
+        Thread.sleep(500);
     }
 
     // 과목명을 입력받는 메소드
@@ -358,7 +493,6 @@ public class ScoreManagement {
         // 선택한 과목이 없는 경우 예외 처리
         throw new IllegalArgumentException("수강 중인 과목 중 입력한 이름과 일치하는 과목이 없습니다.");
     }
-
 
     // 점수 조회
     private void inquiryScoreAtStudent() {
