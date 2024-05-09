@@ -18,11 +18,11 @@ public class ScoreManagement {
     //중원님
     //점수 등록
     public static void addScore() throws InterruptedException {
-        System.out.println("점수를 등록합니다");
+        System.out.println("점수를 등록합니다.");
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
-        //(1) 해당하는 학번 학생 인스터스 가져오기
+        //(1) 해당하는 학번 학생 인스턴스 가져오기
         Student student = StudentManagement.searchGetStudent();
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
@@ -60,12 +60,12 @@ public class ScoreManagement {
 
     //점수 수정
     public static void modScore() throws InterruptedException {
-        System.out.println("점수를 수정합니다");
+        System.out.println("이미 등록된 점수를 수정합니다.");
 
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
         Student student;
-        //(1) 해당하는 학번 학생 인스터스 가져오기
+        //(1) 해당하는 학번 학생 인스턴스 가져오기
         student = StudentManagement.searchGetStudent();
 
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
@@ -140,9 +140,8 @@ public class ScoreManagement {
         //(0) 학생 목록 보여주기
         StudentManagement.inquiryStudent();
 
-        //(1) 해당하는 학번 학생 인스터스 가져오기
+        //(1) 해당하는 학번 학생 인스턴스 가져오기
         Student student;
-        //(1) 해당하는 학번 학생 인스터스 가져오기
         do {
             student = StudentManagement.searchGetStudent();
             if (!isScoreExistByStudentId(student.getStudentId())) {
@@ -156,7 +155,9 @@ public class ScoreManagement {
 
 
         inquirySubjectGrades(student, subjectName);
-
+        // subjectName을 Subject객체가 아닌 String으로 받아와서, 선택한 과목의 name에 접근 불가
+        System.out.println("\n" + student.getStudentName() + " 수강생의, 선택한 과목의 시험 회차 등급 조회가 완료되었습니다.");
+        Thread.sleep(1000);
     }
 
 
@@ -164,6 +165,7 @@ public class ScoreManagement {
     //여기서부터 경민님
     // (1) 수강생의 과목별 평균 등급 조회
     public static void inquiryStudentAverageBySubject() throws InterruptedException {
+        System.out.println("수강생의 과목별 평균 등급을 조회합니다.");
         // 수강생 정보를 가져옴
         StudentManagement.inquiryStudent();
         Student student = StudentManagement.searchGetStudent();
@@ -203,9 +205,11 @@ public class ScoreManagement {
             String subjectName = Store.getSubjectNameBySubjectId(subjectId);
             String grade = Score.calculateGrade((int)averageScore,Store.getSubjectTypeBySubjectId(subjectId));
             // 평균 등급을 출력
-            System.out.println(subjectName + ": " + grade);
+
+            System.out.println(subjectName + ": " + averageScore + "(" + grade + ")");
         }
-        System.out.println();
+        System.out.println(student.getStudentName() + " 수강생의 과목별 평균 등급 출력이 완료되었습니다.\n");
+        Thread.sleep(1000);
     }
 
     // (2) 특정 상태 수강생들의 필수 과목 평균 등급 조회
@@ -289,7 +293,7 @@ public class ScoreManagement {
             // 평균 등급을 출력
             System.out.println(subjectName + ": " + grade);
         }
-        System.out.println();
+        System.out.println("\n" + condition + " 상태 수강생들의 필수 과목 평균 등급 출력이 완료됐습니다.");
     }
 
 
@@ -375,7 +379,6 @@ public class ScoreManagement {
     // 학생의 과목 정보와 비교하여 과목 선택 받기
 
 }
-
 
 
 
