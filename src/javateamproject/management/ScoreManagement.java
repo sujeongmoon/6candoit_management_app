@@ -24,9 +24,16 @@ public class ScoreManagement {
 
         //(1) 해당하는 학번 학생 인스턴스 가져오기
         Student student = StudentManagement.searchGetStudentAtStudent();
+        String subjectName;
+        do{
+            subjectName = SubjectManagement.getSubjectIdFromUserAtAdd(student);
+            if(isFullRound(student.getStudentId(),subjectName)){
+                System.out.println("10회차 모두 입력된 과목입니다.");
+            }
 
+        }while(isFullRound(student.getStudentId(),subjectName));
         //(2) 선택된 학생 과목정보와 비교해서 과목 입력받기
-        String subjectName = SubjectManagement.getSubjectIdFromUserAtAdd(student);
+
 
         int round;
         int score;
@@ -57,6 +64,12 @@ public class ScoreManagement {
         System.out.println("점수가 성공적으로 등록되었습니다.");
         System.out.println("");
 
+    }
+    static boolean isFullRound(String studentId, String subjectId){
+        List<Score> scores = Store.getScoreStore().stream()
+                .filter(score -> score.getStudentId().equals(studentId) && score.getSubjectId().equals(subjectId))
+                .toList();
+        return scores.size()==10;
     }
 
     //점수 수정
