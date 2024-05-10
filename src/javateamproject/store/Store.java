@@ -204,6 +204,17 @@ public class Store {
         addScore("ST2", "SJ1", 4, 60, getSubjectTypeBySubjectId("SJ1"));
         addScore("ST2", "SJ1", 5, 50, getSubjectTypeBySubjectId("SJ1"));
         addScore("ST2", "SJ1", 6, 40, getSubjectTypeBySubjectId("SJ1"));
+        addScore("ST0", "SJ2", 1, 95, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 2, 90, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 3, 85, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 4, 80, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 5, 75, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 6, 70, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 7, 65, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 8, 50, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 9, 100, getSubjectTypeBySubjectId("SJ2"));
+        addScore("ST0", "SJ2", 10, 100, getSubjectTypeBySubjectId("SJ2"));
+
     }
 
     public static List<Score> getScoreByStudentId(String studentId) {
